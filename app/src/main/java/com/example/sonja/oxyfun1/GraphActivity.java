@@ -1,5 +1,6 @@
 package com.example.sonja.oxyfun1;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -8,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
@@ -34,30 +37,31 @@ public class GraphActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         read_csv();
-        int hr_avg=0;
-        int hr_sum=0;
-        for(int i=0;i<track_sample.size();i++){
-            hr_sum+=track_sample.get(i).getHr();
+        int hr_avg = 0;
+        int hr_sum = 0;
+        for (int i = 0; i < track_sample.size(); i++) {
+            hr_sum += track_sample.get(i).getHr();
         }
-        hr_avg=hr_sum/track_sample.size();
+        hr_avg = hr_sum / track_sample.size();
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
 
-        DataPoint[] avg_line=new DataPoint[track_sample.size()];
-        DataPoint[] track_array=new DataPoint[track_sample.size()];
-        DataPoint[] track_altitude=new DataPoint[track_sample.size()];
-        for(int i=0;i<=track_sample.size()-1;i++){
-            track_array[i]=new DataPoint(track_sample.get(i).getDistance(),track_sample.get(i).getHr());
-            track_altitude[i]=new DataPoint(track_sample.get(i).getDistance(),track_sample.get(i).getAltitude());
-            avg_line[i]=new DataPoint(track_sample.get(i).getDistance(),hr_avg);
+        DataPoint[] avg_line = new DataPoint[track_sample.size()];
+        DataPoint[] track_array = new DataPoint[track_sample.size()];
+        DataPoint[] track_altitude = new DataPoint[track_sample.size()];
+        for (int i = 0; i <= track_sample.size() - 1; i++) {
+            track_array[i] = new DataPoint(track_sample.get(i).getDistance(), track_sample.get(i).getHr());
+            track_altitude[i] = new DataPoint(track_sample.get(i).getDistance(), track_sample.get(i).getAltitude());
+            avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
         }
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
-        LineGraphSeries<DataPoint> series_altitude=new LineGraphSeries<>(track_altitude);
+        LineGraphSeries<DataPoint> series_altitude = new LineGraphSeries<>(track_altitude);
         LineGraphSeries<DataPoint> series_avg = new LineGraphSeries<DataPoint>(avg_line);
-
 
 
         graph.setTitle("Heart-Rate Track");
@@ -86,44 +90,68 @@ public class GraphActivity extends AppCompatActivity {
 
     }
 
-    public List<HR_Sample> track_sample =new ArrayList<>();
-
-
-
-        public void read_csv() {
-            InputStream is = getResources().openRawResource(R.raw.dist_hr);
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(is, Charset.forName("UTF-8"))
-            );
-
-            String line="";
-            try {
-                while ((line= bufferedReader.readLine())!=null) {
-                    String[] tokens = line.split(";");
-
-
-                    HR_Sample sample = new HR_Sample();
-                    sample.setDistance(Integer.parseInt(tokens[0]));
-                    sample.setHr(Integer.parseInt(tokens[1]));
-                    sample.setAltitude(Integer.parseInt(tokens[2]));
-                    track_sample.add(sample);
-
-                    Log.d("MyActivity", "Just created " + sample);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.wtf("MyActivity", "Error Reading File" + line, e);
-                e.printStackTrace();
-            }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.action_to_add_measurement:
+                intent = new Intent(this, MeasurementActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_to_home:
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_to_view_measurement:
+                intent = new Intent(this, EntryActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-
-
-            //Log.i("MyActivityClass",Arrays.toString(track_sample()));
-
-
-
-
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public List<HR_Sample> track_sample = new ArrayList<>();
+
+
+    public void read_csv() {
+        InputStream is = getResources().openRawResource(R.raw.dist_hr);
+        BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(is, Charset.forName("UTF-8"))
+        );
+
+        String line = "";
+        try {
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] tokens = line.split(";");
+
+
+                HR_Sample sample = new HR_Sample();
+                sample.setDistance(Integer.parseInt(tokens[0]));
+                sample.setHr(Integer.parseInt(tokens[1]));
+                sample.setAltitude(Integer.parseInt(tokens[2]));
+                track_sample.add(sample);
+
+                Log.d("MyActivity", "Just created " + sample);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.wtf("MyActivity", "Error Reading File" + line, e);
+            e.printStackTrace();
+        }
+    }
+
+
+    //Log.i("MyActivityClass",Arrays.toString(track_sample()));
+
+
+}
 
 

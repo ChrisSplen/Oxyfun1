@@ -31,7 +31,7 @@ public class MeasurementActivity extends AppCompatActivity {
         }
 
         runStopWatch();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
     @Override
@@ -43,20 +43,20 @@ public class MeasurementActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.action_to_add_measurement:
-                Intent intent=new Intent(this, MeasurementActivity.class);
+                intent=new Intent(this, MeasurementActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_to_home:
+                intent=new Intent(this,MainActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_to_view_measurement:
-                Intent intent3=new Intent(this, EntryActivity.class);
-                startActivity(intent3);
+                intent=new Intent(this, EntryActivity.class);
+                startActivity(intent);
                 return true;
-            case R.id.action_to_home:
-                Intent intent2=new Intent(this,MainActivity.class);
-                startActivity(intent2);
-                return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }

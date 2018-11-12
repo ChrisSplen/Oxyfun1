@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class EntryActivity extends AppCompatActivity {
-
+//just a comment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

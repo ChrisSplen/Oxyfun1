@@ -45,43 +45,6 @@ public class EntryActivity extends AppCompatActivity {
 //Assign the listener to the list view
         listDrinks.setOnItemClickListener(itemClickListener);
 
-        /*
-        AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener(){
-            public void onItemClick(AdapterView<?> listView,
-                                    View itemView,
-                                    int position,
-                                    long id) {
-                if (position == 0) {
-                    Intent intent = new Intent(EntryActivity.this, GraphActivity.class);
-                    startActivity(intent);
-                }
-            }
-        };
-        ListView listView = (ListView) findViewById(R.id.list_activities);
-        listView.setOnItemClickListener(itemClickListener);
-*/
-/*
-        //Adapter, um Daten aus dem Array der ListView zuzuweisen
-        ArrayAdapter<Entry> listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_expandable_list_item_1, Entry.activities);
-        ListView listActivities = (ListView) findViewById(R.id.list_activities);
-        listActivities.setAdapter(listAdapter);
-
-        //Erstellung des OnItemClickListeners
-        AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Gib dem Intent eine extra Info zu dem Item, das geklickt wurde, damit beide Aktiviäten wissen, welches Item geklickt wurde
-                Intent intent = new Intent(EntryActivity.this, GraphActivity.class);
-                intent.putExtra(GraphActivity.EXTRA_ACTIVITYID, (int) id);
-                startActivity(intent);
-            }
-        };
-
-        //listener zur listview setzen
-        listActivities.setOnItemClickListener(itemClickListener);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-    */
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

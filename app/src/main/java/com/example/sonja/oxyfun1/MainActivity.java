@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
     @Override
@@ -27,20 +27,20 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.action_to_add_measurement:
-                Intent intent=new Intent(this, MeasurementActivity.class);
+                intent=new Intent(this, MeasurementActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_to_home:
+                intent=new Intent(this,MainActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_to_view_measurement:
-                Intent intent3=new Intent(this, EntryActivity.class);
-                startActivity(intent3);
+                intent=new Intent(this, EntryActivity.class);
+                startActivity(intent);
                 return true;
-            case R.id.action_to_home:
-                Intent intent2=new Intent(this,MainActivity.class);
-                startActivity(intent2);
-                return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Button Click startet die Messungsaktivität
     public void onstartReadingButtonClick(View view){
-        Button button = (Button) findViewById(R.id.startReadingButton);
+        Button button =  findViewById(R.id.startReadingButton);
         Intent intent = new Intent(this, MeasurementActivity.class);
         startActivity(intent);
     }

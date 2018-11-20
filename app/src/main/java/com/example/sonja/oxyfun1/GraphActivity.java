@@ -28,6 +28,12 @@ import java.util.List;
 
 import static java.nio.file.Files.size;
 
+import android.widget.Toast;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
+
 public class GraphActivity extends AppCompatActivity {
 
     public static final String EXTRA_ACTIVITYID = "activityid"; //ist eine Konstante
@@ -88,6 +94,31 @@ public class GraphActivity extends AppCompatActivity {
         graph.getSecondScale().setMinY(175);
         graph.getSecondScale().setMaxY(490);
 
+        //hier folgt Code für die Datenbank
+        //Create a cursor
+        TextView test = (TextView) findViewById(R.id.textView); //zum Testen wo Fehler liegt, da ich keinen Plan vom richtigen Debuggen habe
+        SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
+        try {
+            SQLiteDatabase db = oxyfunDatabaseHelper.getReadableDatabase();
+            Cursor cursor = db.query("Messungen",
+                    new String[]{"Date", "Distance", "Heartrate"},
+                    "Date = ?",
+                    new String[]{Integer.toString(2011)},
+                    null, null, null);
+            //Move to the first record in the Cursor
+            if (cursor.moveToFirst()) {
+//Get the details from the cursor
+                String datum = cursor.getString(0);
+                test.setText(datum);
+            }
+            cursor.close();
+            db.close();
+        } catch (SQLiteException e) {
+            Toast toast = Toast.makeText(this,
+                    "Database unavailable",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     @Override
@@ -147,11 +178,6 @@ public class GraphActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-
-    //Log.i("MyActivityClass",Arrays.toString(track_sample()));
-
-
 }
 
 

@@ -38,7 +38,6 @@ public class GraphActivity extends AppCompatActivity {
 
     public static final String EXTRA_ACTIVITYID = "activityid"; //ist eine Konstante
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +45,6 @@ public class GraphActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-
         read_csv();
         int hr_avg = 0;
         int hr_sum = 0;
@@ -94,23 +92,26 @@ public class GraphActivity extends AppCompatActivity {
         graph.getSecondScale().setMinY(175);
         graph.getSecondScale().setMaxY(490);
 
-        //hier folgt Code für die Datenbank
+        //hier folgt Code für die Datenbank; ist nur eine Spielerei
         //Create a cursor
+
         TextView test = (TextView) findViewById(R.id.textView); //zum Testen wo Fehler liegt, da ich keinen Plan vom richtigen Debuggen habe
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
             SQLiteDatabase db = oxyfunDatabaseHelper.getReadableDatabase();
             Cursor cursor = db.query("Messungen",
-                    new String[]{"Date", "Distance", "Heartrate"},
-                    "Date = ?",
-                    new String[]{Integer.toString(2011)},
+                    new String[]{"Date"},
+                    "_id = ?",
+                    new String[]{Integer.toString(1)},
                     null, null, null);
             //Move to the first record in the Cursor
+
             if (cursor.moveToFirst()) {
 //Get the details from the cursor
                 String datum = cursor.getString(0);
                 test.setText(datum);
             }
+            test.setText(Boolean.toString(cursor.moveToFirst()));
             cursor.close();
             db.close();
         } catch (SQLiteException e) {
@@ -119,6 +120,8 @@ public class GraphActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT);
             toast.show();
         }
+        oxyfunDatabaseHelper.close();
+        this.deleteDatabase("oxyfun"); //hier wird die Datenbank gelöscht, ist hilfreich wenn man nicht immer neue Versionsnummern macht beim testen
     }
 
     @Override
@@ -179,5 +182,3 @@ public class GraphActivity extends AppCompatActivity {
         }
     }
 }
-
-

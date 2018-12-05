@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +18,11 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class EntryActivity extends AppCompatActivity {
-    //Code ist noch in Arbeit und nicht lauffähig
-/*
+
+
     private SQLiteDatabase db;
     private Cursor cursor;
 
@@ -27,36 +30,44 @@ public class EntryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         ListView listData = findViewById(R.id.list_activities);
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
-            db = oxyfunDatabaseHelper.getWritableDatabase();
-            cursor = db.query("datum",
-                    new String[]{"Daten"},
+            db = oxyfunDatabaseHelper.getReadableDatabase();
+            cursor = db.query("Messungen",
+                    new String[]{ "_id","Date"},
                     null, null, null, null, null);
 
-            SimpleCursorAdapter listAdapter = new SimpleCursorAdapter(this,
+
+            SimpleCursorAdapter listAdapter = new SimpleCursorAdapter(this, //im cursor adapter liegt ein Fehler
                     android.R.layout.simple_list_item_1,
                     cursor,
-                    new String[]{"Datum"},
-                    new int[]{android.R.id.text1},
+                    new String[]{"_id"}, //welcher Eintrag im cursor verwendet werden soll
+                    new int[]{android.R.id.text1}, //wohin dieser Eintrag soll
                     0);
             listData.setAdapter(listAdapter);
+
+
         } catch (SQLiteException e) {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
         }
+        oxyfunDatabaseHelper.close();
+        this.deleteDatabase("oxyfun");
 //Create the listener
+
         AdapterView.OnItemClickListener itemClickListener =
                 new AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView<?> listDrinks,
+                    public void onItemClick(AdapterView<?> list_activities,
                                             View itemView,
                                             int position,
                                             long id) {
                         Intent intent = new Intent(EntryActivity.this,
                                 GraphActivity.class);
-                        intent.putExtra(GraphActivity.EXTRA_ACTIVITYID, (int) id);
+
                         startActivity(intent);
                     }
                 };
@@ -64,13 +75,6 @@ public class EntryActivity extends AppCompatActivity {
 //Assign the listener to the list view
         listData.setOnItemClickListener(itemClickListener);
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-// Inflate the menu; this adds items to the app bar.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -99,8 +103,9 @@ public class EntryActivity extends AppCompatActivity {
         super.onDestroy();
         cursor.close();
         db.close();
-    }*/
-
+    }
+    //hier endet Probecode
+/*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,5 +167,7 @@ public class EntryActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
+*/
 }
+
+

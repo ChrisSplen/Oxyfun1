@@ -8,15 +8,13 @@
     tools:context=".EntryActivity">
 
     <include
-        layout="@layout/toolbar"
-        android:id="@+id/toolbar" />
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
     <ListView
         android:id="@+id/list_activities"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar" />
-        <!--android:entries="@array/data" -->
-        <!--></ListView> -->
-
 </RelativeLayout>
 

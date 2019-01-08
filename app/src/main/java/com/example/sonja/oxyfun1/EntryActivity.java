@@ -45,7 +45,7 @@ public class EntryActivity extends AppCompatActivity {
             SimpleCursorAdapter listAdapter = new SimpleCursorAdapter(this, //im cursor adapter liegt ein Fehler
                     android.R.layout.simple_list_item_1,
                     cursor,
-                    new String[]{"_id"}, //welcher Eintrag im cursor verwendet werden soll
+                    new String[]{"Date"}, //welcher Eintrag im cursor verwendet werden soll
                     new int[]{android.R.id.text1}, //wohin dieser Eintrag soll
                     0);
             listData.setAdapter(listAdapter);
@@ -56,7 +56,7 @@ public class EntryActivity extends AppCompatActivity {
             toast.show();
         }
         oxyfunDatabaseHelper.close();
-        this.deleteDatabase("oxyfun");
+        //this.deleteDatabase("oxyfun");
 //Create the listener
 
         AdapterView.OnItemClickListener itemClickListener =
@@ -76,7 +76,12 @@ public class EntryActivity extends AppCompatActivity {
         listData.setOnItemClickListener(itemClickListener);
 
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+// Inflate the menu; this adds items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;

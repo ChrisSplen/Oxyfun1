@@ -25,7 +25,7 @@ public class OxyfunDatabaseHelper extends SQLiteOpenHelper {
     private static void insertData(SQLiteDatabase db, Integer datum,
                                    Integer distance, Integer heartrate, Integer sauerstoffsaettigung) {
         ContentValues dataValues = new ContentValues(); //ContentValue Objekte sind ein Datenset; wird zum Befüllen einer Zeile verwendet
-        dataValues.put("Date", datum); //Datum=Spalte; datum=Wert der eingefügt werden soll
+        dataValues.put("Date", datum); //Date=Spalte; datum=Wert der eingefügt werden soll
         dataValues.put("Distance", distance);
         dataValues.put("Heartrate", heartrate);
         dataValues.put("Sauerstoffsaettigung", sauerstoffsaettigung);

@@ -46,6 +46,7 @@ public class GraphActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         read_csv();
+
         int hr_avg = 0;
         int hr_sum = 0;
         for (int i = 0; i < track_sample.size(); i++) {

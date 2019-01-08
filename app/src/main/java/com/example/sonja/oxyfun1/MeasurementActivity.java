@@ -1,6 +1,10 @@
 package com.example.sonja.oxyfun1;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +37,23 @@ public class MeasurementActivity extends AppCompatActivity {
         runStopWatch();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //database Probecode
+        SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
+        try {
+            SQLiteDatabase db = oxyfunDatabaseHelper.getWritableDatabase();
+            ContentValues contentValues=new ContentValues();
+            contentValues.put("Date",1234);
+            contentValues.put("Distance",134);
+            contentValues.put("Heartrate",100);
+            contentValues.put("Sauerstoffsaettigung",90);
+            long inserted=db.insert("Messungen",null, contentValues);
+            Toast toast = Toast.makeText(this, String.valueOf(inserted), Toast.LENGTH_SHORT);
+            toast.show();
+        }catch(SQLiteException e) {
+            Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

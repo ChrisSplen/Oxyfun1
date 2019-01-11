@@ -45,7 +45,7 @@ public class OxyfunDatabaseHelper extends SQLiteOpenHelper {
             insertData(db, 2011, 200, 80, 10);
         }
         if (oldVersion < 2) {
-            db.execSQL("ALTER TABLE Messungen ADD COLUMN unbekannt;");
+            //db.execSQL("ALTER TABLE Messungen ADD COLUMN unbekannt;");
         }
     }
 }

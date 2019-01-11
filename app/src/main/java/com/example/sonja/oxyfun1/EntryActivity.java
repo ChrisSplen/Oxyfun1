@@ -38,7 +38,7 @@ public class EntryActivity extends AppCompatActivity {
         try {
             db = oxyfunDatabaseHelper.getReadableDatabase();
             cursor = db.query("Messungen",
-                    new String[]{ "_id","Date"},
+                    new String[]{"_id", "Date"},
                     null, null, null, null, null);
 
 
@@ -76,12 +76,14 @@ public class EntryActivity extends AppCompatActivity {
         listData.setOnItemClickListener(itemClickListener);
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 // Inflate the menu; this adds items to the app bar.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
@@ -109,70 +111,6 @@ public class EntryActivity extends AppCompatActivity {
         cursor.close();
         db.close();
     }
-    //hier endet Probecode
-/*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entry);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
-        ArrayAdapter<Drink> listAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                Drink.drinks);
-        ListView listDrinks = findViewById(R.id.list_activities);
-        listDrinks.setAdapter(listAdapter);
-
-        //Create the listener
-        AdapterView.OnItemClickListener itemClickListener =
-                new AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView<?> listDrinks,
-                                            View itemView,
-                                            int position,
-                                            long id) {
-                        Intent intent = new Intent(EntryActivity.this,
-                                GraphActivity.class);
-                        intent.putExtra(GraphActivity.EXTRA_ACTIVITYID, (int) id);
-                        startActivity(intent);
-                    }
-                };
-
-//Assign the listener to the list view
-        listDrinks.setOnItemClickListener(itemClickListener);
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-// Inflate the menu; this adds items to the app bar.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
-        switch (item.getItemId()) {
-            case R.id.action_to_add_measurement:
-                intent = new Intent(this, MeasurementActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.action_to_home:
-                intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.action_to_view_measurement:
-                intent = new Intent(this, EntryActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-*/
 }
 
 

@@ -94,6 +94,7 @@ public class GraphActivity extends AppCompatActivity {
         graph.getSecondScale().setMaxY(490);
 
         //hier folgt Code für die Datenbank; ist nur eine Spielerei
+        /*
         //Create a cursor
 
         TextView test = (TextView) findViewById(R.id.textView); //zum Testen wo Fehler liegt, da ich keinen Plan vom richtigen Debuggen habe
@@ -123,6 +124,7 @@ public class GraphActivity extends AppCompatActivity {
         }
         oxyfunDatabaseHelper.close();
         this.deleteDatabase("oxyfun"); //hier wird die Datenbank gelöscht, ist hilfreich wenn man nicht immer neue Versionsnummern macht beim testen
+        */
     }
 
     @Override

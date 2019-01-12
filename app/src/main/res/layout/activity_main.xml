@@ -10,13 +10,24 @@
     layout="@layout/toolbar"
     android:id="@+id/toolbar" />
 
-
+    <Button
+        android:id="@+id/xclButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="130dp"
+        android:text="Lade Datei"
+        android:textSize="40sp"
+        android:onClick="onstartXCL"
+        app:layout_constraintBottom_toTopOf="@+id/startEntryListButton"
+        app:layout_constraintEnd_toEndOf="@+id/startEntryListButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/startEntryListButton" />
 
     <Button
         android:id="@+id/startReadingButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="50dp"
         android:text="@string/newReadinButton"
         android:textSize="40sp"
         android:onClick="onstartReadingButtonClick"

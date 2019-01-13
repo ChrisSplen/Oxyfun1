@@ -1,10 +1,6 @@
 package com.example.sonja.oxyfun1;
 
-
-import android.Manifest;
-
 import android.content.Context;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,15 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.support.v7.widget.Toolbar;
-
 import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 public class MainActivity extends AppCompatActivity {
-
-    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //need to check the permissions
-        checkFilePermissions();
     }
 
     @Override
@@ -83,15 +73,4 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GraphActivity.class);
         startActivity(intent);
     }
-
-    public void onstartXCL(View view){
-        Intent intent = new Intent(this, XCL_Loader.class);
-        startActivity(intent);
-    }
-    private void checkFilePermissions() {
-
-         this.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, 1001); //Any number
-
-        }
-    }
-
+}

@@ -41,12 +41,14 @@ public class MeasurementActivity extends AppCompatActivity {
         //database Probecode
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
+            this.deleteDatabase("oxyfun");
             SQLiteDatabase db = oxyfunDatabaseHelper.getWritableDatabase();
             ContentValues contentValues=new ContentValues();
-            contentValues.put("Date",1234);
+            contentValues.put("Name","neueMessung3");
             contentValues.put("Distance",134);
             contentValues.put("Heartrate",100);
-            contentValues.put("Sauerstoffsaettigung",90);
+            contentValues.put("Altitude",90);
+            contentValues.put("speed",900);
             long inserted=db.insert("Messungen",null, contentValues);
             Toast toast = Toast.makeText(this, String.valueOf(inserted), Toast.LENGTH_SHORT);
             toast.show();
@@ -168,4 +170,5 @@ public class MeasurementActivity extends AppCompatActivity {
 
         });
     }
+
 }

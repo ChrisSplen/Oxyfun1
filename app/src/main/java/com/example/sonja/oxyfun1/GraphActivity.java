@@ -36,7 +36,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class GraphActivity extends AppCompatActivity {
 
-    public static final String EXTRA_ACTIVITYID = "activityid"; //ist eine Konstante
+    public static final String EXTRA_ID = "ID"; //ist eine Konstante
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,10 @@ public class GraphActivity extends AppCompatActivity {
         setContentView(R.layout.activity_graph);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        int ID=(Integer)getIntent().getExtras().get(EXTRA_ID);
+        Toast toast = Toast.makeText(this, String.valueOf(ID), Toast.LENGTH_SHORT);
+        toast.show();
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         read_csv();
 
@@ -93,6 +97,7 @@ public class GraphActivity extends AppCompatActivity {
         graph.getSecondScale().setMinY(175);
         graph.getSecondScale().setMaxY(490);
 
+
         //hier folgt Code für die Datenbank; ist nur eine Spielerei
         /*
         //Create a cursor
@@ -125,6 +130,7 @@ public class GraphActivity extends AppCompatActivity {
         oxyfunDatabaseHelper.close();
         this.deleteDatabase("oxyfun"); //hier wird die Datenbank gelöscht, ist hilfreich wenn man nicht immer neue Versionsnummern macht beim testen
         */
+
     }
 
     @Override
@@ -184,4 +190,13 @@ public class GraphActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    public int[] string2array(String arraystring){
+        String[] stringarray=arraystring.split(",");
+        int[] intarray=new int[arraystring.length()];
+        for (int i=0; i<arraystring.length();i++){
+            intarray[i]=Integer.parseInt(stringarray[i]);
+        }
+        return intarray;
+    }
+
 }

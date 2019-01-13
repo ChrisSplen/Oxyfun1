@@ -83,7 +83,7 @@ public class GraphActivity extends AppCompatActivity {
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(4);
-        graph.getViewport().setMaxX(80);
+        graph.getViewport().setMaxX(300);
 
         // enable scaling and scrolling
         graph.getViewport().setScalable(true);

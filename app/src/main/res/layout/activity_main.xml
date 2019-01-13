@@ -11,47 +11,50 @@
     android:id="@+id/toolbar" />
 
 
-
     <Button
         android:id="@+id/startReadingButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="72dp"
-        android:text="@string/newReadinButton"
-        android:textSize="40sp"
         android:onClick="onstartReadingButtonClick"
+        android:text="@string/newReadinButton"
+        android:textSize="60sp"
+        android:fontFamily="@font/fonttype"
         app:layout_constraintBottom_toTopOf="@+id/startEntryListButton"
         app:layout_constraintEnd_toEndOf="@+id/startEntryListButton"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/startEntryListButton" />
+        app:layout_constraintStart_toStartOf="@+id/startEntryListButton"
+        android:background="@drawable/buttondesign"/>
 
     <Button
         android:id="@+id/startEntryListButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/startEntryListButton"
-        android:textSize="40sp"
+        android:fontFamily="@font/fonttype"
+        android:textSize="60sp"
         android:onClick="onstartEntryListButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/buttondesign"/>
 
     <Button
         android:id="@+id/startSettingsButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="72dp"
+        android:background="@drawable/buttondesign"
+        android:fontFamily="@font/fonttype"
         android:text="@string/startSettingsButton"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="60sp"
         app:layout_constraintEnd_toEndOf="@+id/startEntryListButton"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/startEntryListButton"
-        app:layout_constraintTop_toBottomOf="@+id/startEntryListButton"
-        app:layout_constraintVertical_bias="0.36" />
-
+        app:layout_constraintTop_toBottomOf="@+id/startEntryListButton" />
+<!--
     <Button
         android:id="@+id/graphButton"
         android:layout_width="383dp"
@@ -68,5 +71,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startSettingsButton" />
-
+-->
 </android.support.constraint.ConstraintLayout>

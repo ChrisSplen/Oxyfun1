@@ -4,7 +4,8 @@
         android:width="2dp"></stroke>
 
     <solid android:color="#116BE8"></solid>
-    <size android:width="130dp"
-        android:height="130dp"></size>
+    <size android:width="140dp"
+        android:height="140dp"></size>
+    <gradient android:angle="180" android:startColor="#8dbab3" android:endColor="#116BE8" />
 
 </shape>

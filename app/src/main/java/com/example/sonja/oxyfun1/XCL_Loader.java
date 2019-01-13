@@ -25,9 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 
 
 public class XCL_Loader extends AppCompatActivity {
@@ -122,29 +120,24 @@ public class XCL_Loader extends AppCompatActivity {
             InputStream inputStream = new FileInputStream(inputFile);
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
             XSSFSheet sheet = workbook.getSheetAt(0);
-            int rowsCount = sheet.getPhysicalNumberOfRows();
+            //int rowsCount = sheet.getPhysicalNumberOfRows();
             FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
             StringBuilder sb = new StringBuilder();
 
-            //outter loop, loops through rows
-            for (int r = 1; r < rowsCount; r++) {
+            //outer loop, loops through rows
+            for (int r = 2; r < 1000; r++) {
                 Row row = sheet.getRow(r);
-                int cellsCount = row.getPhysicalNumberOfCells();
-                //inner loop, loops through columns
-                for (int c = 0; c < cellsCount; c++) {
-                    //handles if there are to many columns on the excel sheet.
-                    if(c>2){
-                        Log.e(TAG, "readExcelData: ERROR. Excel File Format is incorrect! " );
-                        toastMessage("ERROR: Excel File Format is incorrect!");
-                        break;
-                    }else{
-                        String value = getCellAsString(row, c, formulaEvaluator);
-                        String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
-                        Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
-                        sb.append(value + ", ");
+                //int cellsCount = row.getPhysicalNumberOfCells();
+                    //inner loop, loops through columns
+                     for (int c = 0; c < 8; c++) {
+                            if( c==0 || c==2 || c==4 || c==7) {
+                                String value = getCellAsString(row, c, formulaEvaluator);
+                                String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
+                                Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
+                                sb.append(value + ", ");
+                            }
                     }
-                }
-                sb.append(":");
+                sb.append(";");
             }
             Log.d(TAG, "readExcelData: STRINGBUILDER: " + sb.toString());
 
@@ -164,25 +157,28 @@ public class XCL_Loader extends AppCompatActivity {
         Log.d(TAG, "parseStringBuilder: Started parsing.");
 
         // splits the sb into rows.
-        String[] rows = mStringBuilder.toString().split(":");
-
-        //Add to the ArrayList<XYValue> row by row
+        String[] rows = mStringBuilder.toString().split(";");
+        Log.d(TAG, "row split worked.");
+        //Add to the ArrayList<Values> row by row
         for(int i=0; i<rows.length; i++) {
             //Split the columns of the rows
             String[] columns = rows[i].split(",");
-
+            Log.d(TAG, "col split worked.");
             //use try catch to make sure there are no "" that try to parse into doubles.
             try{
-                double dist = Double.parseDouble(columns[0]);
-                double pulse = Double.parseDouble(columns[1]);
-                double time = Double.parseDouble(columns[2]);
-                double speed = Double.parseDouble(columns[3]);
-
-                String cellInfo = "(dist, pulse, time, speed): (" + dist + "," + pulse + "," + time +"," + speed + ")";
+                Log.d(TAG, "ParseStringBuilder: Data from row: " + columns[1]);
+                double dist = Double.parseDouble(columns[1]);
+                Log.d(TAG, "dist parse worked.");
+                double pulse = Double.parseDouble(columns[3]);
+                Log.d(TAG, "pulse parse worked.");
+                double time = Double.parseDouble(columns[0]);
+                Log.d(TAG, "time parse worked.");
+                double speed = Double.parseDouble(columns[2]);
+                String cellInfo = "(dist, pulse, time, speed): (" + dist + "," + pulse + "," + time + "," +  speed + ")";
                 Log.d(TAG, "ParseStringBuilder: Data from row: " + cellInfo);
 
                 //add the the uploadData ArrayList
-                 uploadData.add(new Values( dist, pulse, time, speed));
+                 uploadData.add(new Values(dist, pulse, time, speed));
 
             }catch (NumberFormatException e){
 
@@ -198,18 +194,16 @@ public class XCL_Loader extends AppCompatActivity {
         Log.d(TAG, "printDataToLog: Printing data to log...");
 
         for(int i = 0; i< uploadData.size(); i++){
-            //double x = uploadData.get(i).getX();
-            //double y = uploadData.get(i).getY();
-            //Log.d(TAG, "printDataToLog: (x,y): (" + x + "," + y + ")");
+            double dist = uploadData.get(i).getDist();
+            double pulse = uploadData.get(i).getPulse();
+            double time = uploadData.get(i).getTime();
+            double speed = uploadData.get(i).getSpeed();
+            Log.d(TAG, "printDataToLog: (dist, pulse, time , speed): (" + dist + "," + pulse + "," + time +"," + speed + ")");
         }
     }
 
     /**
      * Returns the cell as a string from the excel file
-     * row
-     * c
-     * formulaEvaluator
-     *
      */
     private String getCellAsString(Row row, int c, FormulaEvaluator formulaEvaluator) {
         String value = "";
@@ -223,16 +217,34 @@ public class XCL_Loader extends AppCompatActivity {
                 case Cell.CELL_TYPE_NUMERIC:
                     double numericValue = cellValue.getNumberValue();
                     if(HSSFDateUtil.isCellDateFormatted(cell)) {
+                        Log.d(TAG, "DATEFORMATTER: Started.");
                         double date = cellValue.getNumberValue();
-                        SimpleDateFormat formatter =
-                                new SimpleDateFormat("MM/dd/yy");
-                        value = formatter.format(HSSFDateUtil.getJavaDate(date));
+                        /**SimpleDateFormat formatter =
+                                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS");
+                        String buffer = formatter.format(HSSFDateUtil.getJavaDate(date));
+                        char[] chars = buffer.toCharArray();
+                        String targetDate = new String(chars, 13, 21);
+                        String[] tokens = targetDate.split(":");
+                        int hours = Integer.parseInt(tokens[0]);
+                        int minutes = Integer.parseInt(tokens[1]);
+                        int seconds = Integer.parseInt(tokens[2]);
+                        int duration = 3600 * hours + 60 * minutes + seconds;*/
+                        value = ""+date;
                     } else {
                         value = ""+numericValue;
                     }
                     break;
                 case Cell.CELL_TYPE_STRING:
-                    value = ""+cellValue.getStringValue();
+                    String buffa= cellValue.getStringValue();
+                    char[] chars = buffa.toCharArray();
+                    String targetDate = new String(chars, 11, 8);
+                    String[] tokens = targetDate.split(":");
+                    int hours = Integer.parseInt(tokens[0]);
+                    int minutes = Integer.parseInt(tokens[1]);
+                    int seconds = Integer.parseInt(tokens[2]);
+                    int duration = 3600 * hours + 60 * minutes + seconds;
+                    value = ""+duration;
+                    //value = ""+cellValue.getStringValue();
                     break;
                 default:
             }

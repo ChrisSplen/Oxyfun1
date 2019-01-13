@@ -1,7 +1,7 @@
 package com.example.sonja.oxyfun1;
 
 import android.view.ViewDebug;
-
+//unnötig?
 public class Entry {
 
     private String name;

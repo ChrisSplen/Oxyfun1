@@ -8,17 +8,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import static com.example.sonja.oxyfun1.GraphActivity.EXTRA_ID;
 
 public class EntryActivity extends AppCompatActivity {
 
@@ -37,15 +37,16 @@ public class EntryActivity extends AppCompatActivity {
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
             db = oxyfunDatabaseHelper.getReadableDatabase();
+            this.deleteDatabase("oxyfun");
             cursor = db.query("Messungen",
-                    new String[]{"_id", "Date"},
+                    new String[]{"_id", "Name"},
                     null, null, null, null, null);
 
 
-            SimpleCursorAdapter listAdapter = new SimpleCursorAdapter(this, //im cursor adapter liegt ein Fehler
+            SimpleCursorAdapter listAdapter = new SimpleCursorAdapter(this,
                     android.R.layout.simple_list_item_1,
                     cursor,
-                    new String[]{"Date"}, //welcher Eintrag im cursor verwendet werden soll
+                    new String[]{"Name"}, //welcher Eintrag im cursor verwendet werden soll
                     new int[]{android.R.id.text1}, //wohin dieser Eintrag soll
                     0);
             listData.setAdapter(listAdapter);
@@ -67,7 +68,7 @@ public class EntryActivity extends AppCompatActivity {
                                             long id) {
                         Intent intent = new Intent(EntryActivity.this,
                                 GraphActivity.class);
-
+                        intent.putExtra(EXTRA_ID,(int)id);
                         startActivity(intent);
                     }
                 };

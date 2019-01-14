@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.nio.file.Files.size;
+import static org.apache.xmlbeans.impl.piccolo.xml.AttributeDefinition.ID;
 
 import android.widget.Toast;
 import android.database.Cursor;
@@ -46,10 +47,15 @@ public class GraphActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         int ID=(Integer)getIntent().getExtras().get(EXTRA_ID);
+
         Toast toast = Toast.makeText(this, String.valueOf(ID), Toast.LENGTH_SHORT);
         toast.show();
+
+
+
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         read_csv();
+        read_excel();
 
         int hr_avg = 0;
         int hr_sum = 0;
@@ -165,6 +171,7 @@ public class GraphActivity extends AppCompatActivity {
 
 
     public void read_csv() {
+
         InputStream is = getResources().openRawResource(R.raw.dist_hr);
         BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8"))
@@ -190,13 +197,53 @@ public class GraphActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    public void read_excel(){
+        SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
+        try {
+            SQLiteDatabase db = oxyfunDatabaseHelper.getReadableDatabase();
+            Cursor cursor = db.query("Messungen",
+                    new String[]{"Distance","Heartrate","Time","Speed"},
+                    "_id = ?",
+                    new String[]{Integer.toString(ID)},
+                    null, null, null);
+
+            for(int i=0;i<1001;i++){
+                HR_Sample sample = new HR_Sample();
+                if (cursor.moveToFirst()) {
+//Get the details from the cursor
+                    sample.setDistance(string2array(cursor.getString(0))[i]);
+                }
+                if(cursor.moveToNext()){
+                    sample.setHr(string2array(cursor.getString(1))[i]);
+                }
+                if(cursor.moveToNext()){
+                    sample.setTime(string2array(cursor.getString(2))[i]);
+                }
+                if(cursor.moveToNext()){
+                    sample.setSpeed(string2array(cursor.getString(3))[i]);
+                }
+            }
+            cursor.close();
+            db.close();
+        } catch (SQLiteException e) {
+            Toast toast = Toast.makeText(this,
+                    "Database unavailable",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        oxyfunDatabaseHelper.close();
+        //this.deleteDatabase("oxyfun"); //hier wird die Datenbank gelöscht, ist hilfreich wenn man nicht immer neue Versionsnummern macht beim testen
+
+
+    }
+
     public int[] string2array(String arraystring){
         String[] stringarray=arraystring.split(",");
-        int[] intarray=new int[arraystring.length()];
+        int[] doublearray=new int[arraystring.length()];
         for (int i=0; i<arraystring.length();i++){
-            intarray[i]=Integer.parseInt(stringarray[i]);
+            doublearray[i]=Integer.parseInt(stringarray[i]);
         }
-        return intarray;
+        return doublearray;
     }
 
 }

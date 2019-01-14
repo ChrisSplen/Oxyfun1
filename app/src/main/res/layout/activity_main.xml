@@ -28,23 +28,20 @@
     <Button
         android:id="@+id/startReadingButton"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="71dp"
 
-        android:layout_marginBottom="50dp"
-        android:text="@string/newReadinButton"
-        android:textSize="40sp"
 
         android:layout_marginBottom="72dp"
 
+        android:background="@drawable/buttondesign"
+        android:fontFamily="@font/fonttype"
         android:onClick="onstartReadingButtonClick"
         android:text="@string/newReadinButton"
         android:textSize="60sp"
-        android:fontFamily="@font/fonttype"
         app:layout_constraintBottom_toTopOf="@+id/startEntryListButton"
         app:layout_constraintEnd_toEndOf="@+id/startEntryListButton"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/startEntryListButton"
-        android:background="@drawable/buttondesign"/>
+        app:layout_constraintStart_toStartOf="@+id/startEntryListButton" />
 
     <Button
         android:id="@+id/startEntryListButton"
@@ -74,7 +71,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/startEntryListButton"
         app:layout_constraintTop_toBottomOf="@+id/startEntryListButton" />
-<!--
+
     <Button
         android:id="@+id/graphButton"
         android:layout_width="383dp"

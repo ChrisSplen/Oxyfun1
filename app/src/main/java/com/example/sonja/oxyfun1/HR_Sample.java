@@ -7,6 +7,8 @@ class HR_Sample {
     private int distance;
     private int hr;
     private int altitude;
+    private int speed;
+    private int time;
 
 
     public int getAltitude() {
@@ -35,7 +37,13 @@ class HR_Sample {
         this.distance = distance;
     }
 
+    public int getTime() { return time; }
 
+    public void setTime(int time) {this.time = time;}
+
+    public int getSpeed() { return speed; }
+
+    public void setSpeed(int speed) {this.speed = speed;}
 
     @Override
     public String toString() {
@@ -44,4 +52,6 @@ class HR_Sample {
                 ", hr=" + hr +
                 '}';
     }
+
+
 }

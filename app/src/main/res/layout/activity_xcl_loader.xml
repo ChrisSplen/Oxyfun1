@@ -8,23 +8,22 @@
         layout="@layout/toolbar"
         android:id="@+id/toolbar" />
 
-        <Button
-            android:layout_marginLeft="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnUpDirectory"
-            android:layout_marginTop="120dp"
-            android:text="Ordner zurück" />
+    <Button
+        android:id="@+id/btnUpDirectory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="120dp"
+        android:text="Ordner zurück" />
 
-        <Button
-            android:layout_marginRight="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnViewSDCard"
-            android:layout_marginTop="120dp"
-            android:text="Datei laden"
-            android:layout_alignParentRight="true"
-            />
+    <Button
+        android:id="@+id/btnViewSDCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="120dp"
+        android:layout_marginRight="15dp"
+        android:text="Datei laden" />
 
     <ListView
         android:layout_width="match_parent"

@@ -1,10 +1,19 @@
 package com.example.sonja.oxyfun1;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,6 +52,18 @@ public class XCL_Loader extends AppCompatActivity {
     int count = 0;
     public ArrayList<Values> uploadData;
     ListView lvInternalStorage;
+    double[] distance=new double[1001];
+    double [] heartrate=new double[1001];
+    double [] t=new double[1001];
+    double [] v=new double[1001];
+    String distance_str;
+    String heartrate_str;
+    String t_str;
+    String v_str;
+
+
+    public static int name_nr=1;
+
 
 
     @Override
@@ -110,6 +131,34 @@ public class XCL_Loader extends AppCompatActivity {
     /**
      *reads the excel file columns then rows. Stores data as ExcelUploadData object
      */
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+// Inflate the menu; this adds items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.action_to_add_measurement:
+                intent = new Intent(this, MeasurementActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_to_home:
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_to_view_measurement:
+                intent = new Intent(this, EntryActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     private void readExcelData(String filePath) {
         Log.d(TAG, "readExcelData: Reading Excel File.");
 
@@ -128,15 +177,15 @@ public class XCL_Loader extends AppCompatActivity {
             for (int r = 2; r < 1000; r++) {
                 Row row = sheet.getRow(r);
                 //int cellsCount = row.getPhysicalNumberOfCells();
-                    //inner loop, loops through columns
-                     for (int c = 0; c < 8; c++) {
-                            if( c==0 || c==2 || c==4 || c==7) {
-                                String value = getCellAsString(row, c, formulaEvaluator);
-                                String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
-                                Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
-                                sb.append(value + ", ");
-                            }
+                //inner loop, loops through columns
+                for (int c = 0; c < 8; c++) {
+                    if( c==0 || c==2 || c==4 || c==7) {
+                        String value = getCellAsString(row, c, formulaEvaluator);
+                        String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
+                        Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
+                        sb.append(value + ", ");
                     }
+                }
                 sb.append(";");
             }
             Log.d(TAG, "readExcelData: STRINGBUILDER: " + sb.toString());
@@ -178,7 +227,7 @@ public class XCL_Loader extends AppCompatActivity {
                 Log.d(TAG, "ParseStringBuilder: Data from row: " + cellInfo);
 
                 //add the the uploadData ArrayList
-                 uploadData.add(new Values(dist, pulse, time, speed));
+                uploadData.add(new Values(dist, pulse, time, speed));
 
             }catch (NumberFormatException e){
 
@@ -199,7 +248,37 @@ public class XCL_Loader extends AppCompatActivity {
             double time = uploadData.get(i).getTime();
             double speed = uploadData.get(i).getSpeed();
             Log.d(TAG, "printDataToLog: (dist, pulse, time , speed): (" + dist + "," + pulse + "," + time +"," + speed + ")");
+            distance[i] = uploadData.get(i).getDist();
+            heartrate [i]= uploadData.get(i).getPulse();
+            t [i]= uploadData.get(i).getTime();
+            v[i] = uploadData.get(i).getSpeed();
+
         }
+        Toast toast = Toast.makeText(this, Double.toString(v[50]), Toast.LENGTH_LONG);
+        toast.show();
+        distance_str=array2string(distance);
+        heartrate_str=array2string(distance);
+        t_str=array2string(distance);
+        v_str=array2string(distance);
+
+        SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
+        try {
+            this.deleteDatabase("oxyfun");
+            SQLiteDatabase db = oxyfunDatabaseHelper.getWritableDatabase();
+            ContentValues contentValues=new ContentValues();
+            contentValues.put("Name","Messung"+String.valueOf(name_nr));
+            contentValues.put("Distance",distance_str);
+            contentValues.put("Heartrate",heartrate_str);
+            contentValues.put("Altitude",90);
+            contentValues.put("speed",v_str);
+            long inserted=db.insert("Messungen",null, contentValues);
+             toast = Toast.makeText(this, String.valueOf(inserted), Toast.LENGTH_SHORT);
+            toast.show();
+        }catch(SQLiteException e) {
+            toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        name_nr+=1;
     }
 
     /**
@@ -220,15 +299,15 @@ public class XCL_Loader extends AppCompatActivity {
                         Log.d(TAG, "DATEFORMATTER: Started.");
                         double date = cellValue.getNumberValue();
                         /**SimpleDateFormat formatter =
-                                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS");
-                        String buffer = formatter.format(HSSFDateUtil.getJavaDate(date));
-                        char[] chars = buffer.toCharArray();
-                        String targetDate = new String(chars, 13, 21);
-                        String[] tokens = targetDate.split(":");
-                        int hours = Integer.parseInt(tokens[0]);
-                        int minutes = Integer.parseInt(tokens[1]);
-                        int seconds = Integer.parseInt(tokens[2]);
-                        int duration = 3600 * hours + 60 * minutes + seconds;*/
+                         new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS");
+                         String buffer = formatter.format(HSSFDateUtil.getJavaDate(date));
+                         char[] chars = buffer.toCharArray();
+                         String targetDate = new String(chars, 13, 21);
+                         String[] tokens = targetDate.split(":");
+                         int hours = Integer.parseInt(tokens[0]);
+                         int minutes = Integer.parseInt(tokens[1]);
+                         int seconds = Integer.parseInt(tokens[2]);
+                         int duration = 3600 * hours + 60 * minutes + seconds;*/
                         value = ""+date;
                     } else {
                         value = ""+numericValue;
@@ -296,8 +375,15 @@ public class XCL_Loader extends AppCompatActivity {
         }
     }
 
-     private void toastMessage(String message){
+    private void toastMessage(String message){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
+    }
+    private String array2string(double[] array){
+        String arraystring=String.valueOf(array[0]);
+        for(int i=1;i<array.length;i++){
+            arraystring+=","+ String.valueOf(array[i]);
+        }
+        return arraystring;
     }
 
 

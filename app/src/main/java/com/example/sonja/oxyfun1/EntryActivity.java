@@ -37,7 +37,7 @@ public class EntryActivity extends AppCompatActivity {
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
             db = oxyfunDatabaseHelper.getReadableDatabase();
-            this.deleteDatabase("oxyfun");
+            //this.deleteDatabase("oxyfun");
             cursor = db.query("Messungen",
                     new String[]{"_id", "Name"},
                     null, null, null, null, null);

@@ -1,13 +1,16 @@
 package com.example.sonja.oxyfun1;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,12 +22,15 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        checkFilePermissions();
     }
 
     @Override
@@ -72,5 +78,21 @@ public class MainActivity extends AppCompatActivity {
     public void onstartGraphViewButton(View view) {
         Intent intent = new Intent(this, GraphActivity.class);
         startActivity(intent);
+    }
+    public void onstartXCL(View view){
+        Intent intent = new Intent(this, XCL_Loader.class);
+        startActivity(intent);
+    }
+    private void checkFilePermissions() {
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
+            int permissionCheck = this.checkSelfPermission("Manifest.permission.READ_EXTERNAL_STORAGE");
+            permissionCheck += this.checkSelfPermission("Manifest.permission.WRITE_EXTERNAL_STORAGE");
+            if (permissionCheck != 0) {
+
+                this.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, 1001); //Any number
+            }
+        }else{
+            Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
+        }
     }
 }

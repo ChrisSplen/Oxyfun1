@@ -39,6 +39,7 @@ public class MeasurementActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //database Probecode
+        /*
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
             this.deleteDatabase("oxyfun");
@@ -56,6 +57,7 @@ public class MeasurementActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
         }
+        */
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

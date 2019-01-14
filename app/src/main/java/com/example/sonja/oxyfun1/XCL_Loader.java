@@ -263,13 +263,13 @@ public class XCL_Loader extends AppCompatActivity {
 
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
-            this.deleteDatabase("oxyfun");
+            //this.deleteDatabase("oxyfun");
             SQLiteDatabase db = oxyfunDatabaseHelper.getWritableDatabase();
             ContentValues contentValues=new ContentValues();
-            contentValues.put("Name","Messung"+String.valueOf(name_nr));
+            contentValues.put("Name","Messung");
             contentValues.put("Distance",distance_str);
             contentValues.put("Heartrate",heartrate_str);
-            contentValues.put("Altitude",90);
+            contentValues.put("Altitude",0);
             contentValues.put("speed",v_str);
             long inserted=db.insert("Messungen",null, contentValues);
              toast = Toast.makeText(this, String.valueOf(inserted), Toast.LENGTH_SHORT);
@@ -278,7 +278,7 @@ public class XCL_Loader extends AppCompatActivity {
             toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
         }
-        name_nr+=1;
+
     }
 
     /**

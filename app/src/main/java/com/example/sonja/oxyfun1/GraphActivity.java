@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -39,6 +40,8 @@ public class GraphActivity extends AppCompatActivity {
 
     public static final String EXTRA_ID = "ID"; //ist eine Konstante
 
+    //int id=(Integer)getIntent().getExtras().get(EXTRA_ID);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,15 +49,13 @@ public class GraphActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        int ID=(Integer)getIntent().getExtras().get(EXTRA_ID);
 
-        Toast toast = Toast.makeText(this, String.valueOf(ID), Toast.LENGTH_SHORT);
-        toast.show();
+        //Log.d("asdf",EXTRA_ID);
 
 
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        read_csv();
+        //read_csv();
         read_excel();
 
         int hr_avg = 0;
@@ -198,23 +199,28 @@ public class GraphActivity extends AppCompatActivity {
         }
     }
     public void read_excel(){
+        HR_Sample sample = new HR_Sample();
+        int id=(Integer)getIntent().getExtras().get(EXTRA_ID);
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
             SQLiteDatabase db = oxyfunDatabaseHelper.getReadableDatabase();
             Cursor cursor = db.query("Messungen",
                     new String[]{"Distance","Heartrate","Time","Speed"},
                     "_id = ?",
-                    new String[]{Integer.toString(ID)},
+                    new String[]{Integer.toString(id)},
                     null, null, null);
 
-            for(int i=0;i<1001;i++){
-                HR_Sample sample = new HR_Sample();
+            for(int i=0;i<1000;i++){
+
                 if (cursor.moveToFirst()) {
 //Get the details from the cursor
                     sample.setDistance(string2array(cursor.getString(0))[i]);
+                    //Log.d("asdf",String.valueOf(string2array(cursor.getString(0))[i]));
+                   // Log.d("asdf",String.valueOf(sample.getDistance()));
                 }
                 if(cursor.moveToNext()){
                     sample.setHr(string2array(cursor.getString(1))[i]);
+
                 }
                 if(cursor.moveToNext()){
                     sample.setTime(string2array(cursor.getString(2))[i]);
@@ -222,9 +228,12 @@ public class GraphActivity extends AppCompatActivity {
                 if(cursor.moveToNext()){
                     sample.setSpeed(string2array(cursor.getString(3))[i]);
                 }
+                sample.setAltitude(0);
+                track_sample.add(sample);
             }
             cursor.close();
             db.close();
+
         } catch (SQLiteException e) {
             Toast toast = Toast.makeText(this,
                     "Database unavailable",
@@ -238,12 +247,17 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     public int[] string2array(String arraystring){
+
         String[] stringarray=arraystring.split(",");
-        int[] doublearray=new int[arraystring.length()];
-        for (int i=0; i<arraystring.length();i++){
-            doublearray[i]=Integer.parseInt(stringarray[i]);
+        int[] array=new int[arraystring.length()];
+        double[] double_array=new double[arraystring.length()];
+        for (int i=0; i<1000;i++){
+
+            double_array[i]=Double.valueOf(stringarray[i]);
+            array[i]=(int)(double_array[i]);
+
         }
-        return doublearray;
+        return array;
     }
 
 }

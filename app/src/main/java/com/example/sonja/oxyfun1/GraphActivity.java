@@ -60,22 +60,23 @@ public class GraphActivity extends AppCompatActivity {
 
         int hr_avg = 0;
         int hr_sum = 0;
-        for (int i = 0; i < track_sample.size(); i++) {
+        for (int i = 0; i < 1000; i++) {
             hr_sum += track_sample.get(i).getHr();
         }
-        hr_avg = hr_sum / track_sample.size();
+        hr_avg = hr_sum / 1000;
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
 
-        DataPoint[] avg_line = new DataPoint[track_sample.size()];
-        DataPoint[] track_array = new DataPoint[track_sample.size()];
-        DataPoint[] track_altitude = new DataPoint[track_sample.size()];
-        for (int i = 0; i <= track_sample.size() - 1; i++) {
+        DataPoint[] avg_line = new DataPoint[1000];
+
+        DataPoint[] track_array = new DataPoint[1000];
+        DataPoint[] track_altitude = new DataPoint[1000];
+        for (int i = 0; i <= 1000 - 1; i++) {
             track_array[i] = new DataPoint(track_sample.get(i).getDistance(), track_sample.get(i).getHr());
             track_altitude[i] = new DataPoint(track_sample.get(i).getDistance(), track_sample.get(i).getAltitude());
             avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
         }
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array); //hier liegt der Hund begraben
         LineGraphSeries<DataPoint> series_altitude = new LineGraphSeries<>(track_altitude);
         LineGraphSeries<DataPoint> series_avg = new LineGraphSeries<DataPoint>(avg_line);
 
@@ -199,37 +200,32 @@ public class GraphActivity extends AppCompatActivity {
         }
     }
     public void read_excel(){
-        HR_Sample sample = new HR_Sample();
+
         int id=(Integer)getIntent().getExtras().get(EXTRA_ID);
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
             SQLiteDatabase db = oxyfunDatabaseHelper.getReadableDatabase();
             Cursor cursor = db.query("Messungen",
-                    new String[]{"Distance","Heartrate","Time","Speed"},
+                    new String[]{"Distance","Heartrate","Altitude","Speed"},
                     "_id = ?",
                     new String[]{Integer.toString(id)},
                     null, null, null);
-
             for(int i=0;i<1000;i++){
+                HR_Sample sample = new HR_Sample();
 
                 if (cursor.moveToFirst()) {
 //Get the details from the cursor
+
                     sample.setDistance(string2array(cursor.getString(0))[i]);
+                    sample.setHr(string2array(cursor.getString(1))[i]);
+                    sample.setAltitude(0);
+                    //sample.setSpeed(string2array(cursor.getString(3))[i]);
+                    //
                     //Log.d("asdf",String.valueOf(string2array(cursor.getString(0))[i]));
                    // Log.d("asdf",String.valueOf(sample.getDistance()));
                 }
-                if(cursor.moveToNext()){
-                    sample.setHr(string2array(cursor.getString(1))[i]);
-
-                }
-                if(cursor.moveToNext()){
-                    sample.setTime(string2array(cursor.getString(2))[i]);
-                }
-                if(cursor.moveToNext()){
-                    sample.setSpeed(string2array(cursor.getString(3))[i]);
-                }
-                sample.setAltitude(0);
                 track_sample.add(sample);
+                Log.d("asdf", "Just created " + sample);
             }
             cursor.close();
             db.close();

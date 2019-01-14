@@ -257,9 +257,9 @@ public class XCL_Loader extends AppCompatActivity {
         Toast toast = Toast.makeText(this, Double.toString(v[50]), Toast.LENGTH_LONG);
         toast.show();
         distance_str=array2string(distance);
-        heartrate_str=array2string(distance);
-        t_str=array2string(distance);
-        v_str=array2string(distance);
+        heartrate_str=array2string(heartrate);
+        t_str=array2string(t);
+        v_str=array2string(v);
 
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {

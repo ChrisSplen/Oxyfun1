@@ -59,17 +59,17 @@ public class GraphActivity extends AppCompatActivity {
         DataPoint[] avg_line = new DataPoint[track_sample.size()];
         DataPoint[] track_array = new DataPoint[track_sample.size()];
         DataPoint[] track_altitude = new DataPoint[track_sample.size()];
-        DataPoint[] track_time = new DataPoint[track_sample.size()];
+        DataPoint[] track_distance = new DataPoint[track_sample.size()];
 
         for (int i = 0; i <= track_sample.size() - 1; i++) {
             track_array[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getHr());
             track_altitude[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getAltitude());
-            track_altitude[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getDistance());
+            track_distance[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getDistance());
 
             avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
         }
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
-        LineGraphSeries<DataPoint> series_distance = new LineGraphSeries<>(track_time);
+        LineGraphSeries<DataPoint> series_distance = new LineGraphSeries<>(track_distance);
         LineGraphSeries<DataPoint> series_altitude = new LineGraphSeries<>(track_altitude);
         LineGraphSeries<DataPoint> series_avg = new LineGraphSeries<DataPoint>(avg_line);
 
@@ -192,6 +192,7 @@ public class GraphActivity extends AppCompatActivity {
                 sample.setHr(Integer.parseInt(tokens[1]));
                 sample.setAltitude(Integer.parseInt(tokens[2]));
                 sample.setTime(Integer.parseInt(tokens[3]));
+                sample.setSpeed(Integer.parseInt(tokens[4]));
                 track_sample.add(sample);
 
                 Log.d("MyActivity", "Just created " + sample);

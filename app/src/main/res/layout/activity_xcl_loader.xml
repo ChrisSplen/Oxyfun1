@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".XCL_Loader">
 
     <include
         layout="@layout/toolbar"
@@ -30,6 +32,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/lvInternalStorage"
-        android:layout_marginTop="180dp"></ListView>
+        android:layout_below="@+id/btnViewSDCard"/>
 
 </RelativeLayout>

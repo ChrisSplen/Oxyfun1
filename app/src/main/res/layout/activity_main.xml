@@ -11,31 +11,12 @@
     android:id="@+id/toolbar" />
 
 
-    <Button
-        android:id="@+id/xclButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="130dp"
-        android:text="Lade Datei"
-        android:textSize="40sp"
-        android:onClick="onstartXCL"
-        app:layout_constraintBottom_toTopOf="@+id/startEntryListButton"
-        app:layout_constraintEnd_toEndOf="@+id/startEntryListButton"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/startEntryListButton" />
-
 
     <Button
         android:id="@+id/startReadingButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
-        android:layout_marginBottom="50dp"
-        android:text="@string/newReadinButton"
-        android:textSize="40sp"
-
         android:layout_marginBottom="72dp"
-
         android:onClick="onstartReadingButtonClick"
         android:text="@string/newReadinButton"
         android:textSize="60sp"
@@ -62,13 +43,14 @@
         android:background="@drawable/buttondesign"/>
 
     <Button
-        android:id="@+id/startSettingsButton"
+        android:id="@+id/xclButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
         android:background="@drawable/buttondesign"
         android:fontFamily="@font/fonttype"
-        android:text="@string/startSettingsButton"
+        android:text="@string/load_data"
+        android:onClick="onstartXCL"
         android:textSize="60sp"
         app:layout_constraintEnd_toEndOf="@+id/startEntryListButton"
         app:layout_constraintHorizontal_bias="1.0"
@@ -91,7 +73,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startSettingsButton" />
-
+-->
 
 </android.support.constraint.ConstraintLayout>
-

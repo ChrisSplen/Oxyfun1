@@ -72,10 +72,12 @@ public class GraphActivity extends AppCompatActivity {
 
         DataPoint[] track_array = new DataPoint[998];
         DataPoint[] track_altitude = new DataPoint[998];
+        DataPoint[] track_distance = new DataPoint[998];
         for (int i = 0; i <= 998 - 1; i++) {
             track_array[i] = new DataPoint(track_sample.get(i).getDistance(), track_sample.get(i).getHr());
             Log.d("asdf","track: "+String.valueOf(track_sample.get(i).getDistance())+" "+String.valueOf(track_sample.get(i).getHr()));
             track_altitude[i] = new DataPoint(track_sample.get(i).getDistance(), track_sample.get(i).getAltitude());
+            track_distance[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getDistance());
             avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
         }
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
@@ -203,8 +205,8 @@ public class GraphActivity extends AppCompatActivity {
 
 
     public void read_csv() {
-        //InputStream is = getResources().openRawResource(R.raw.dist_hr);
-        InputStream is = getResources().openRawResource(R.raw.dist_hr1);
+        InputStream is = getResources().openRawResource(R.raw.dist_hr);
+        //InputStream is = getResources().openRawResource(R.raw.dist_hr1);
         BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8"))
         );

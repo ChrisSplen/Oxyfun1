@@ -62,8 +62,8 @@ public class GraphActivity extends AppCompatActivity {
         //Log.d("asdf",EXTRA_ID);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        read_csv();
-        //read_excel();
+        //read_csv();
+        read_excel();
 
         int hr_avg = 0;
         int hr_sum = 0;
@@ -73,7 +73,7 @@ public class GraphActivity extends AppCompatActivity {
         hr_avg = hr_sum / 1000;
 
         final GraphView graph = (GraphView) findViewById(R.id.graph);
-/*
+
         DataPoint[] avg_line = new DataPoint[998];
         DataPoint[] track_array = new DataPoint[998];
         DataPoint[] track_altitude = new DataPoint[998];
@@ -88,9 +88,11 @@ public class GraphActivity extends AppCompatActivity {
             track_speed[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getSpeed());
             avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
         }
+        /*
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
         series.setTitle("HR");
   */
+/*
         DataPoint[] avg_line = new DataPoint[track_sample.size()];
         DataPoint[] track_array = new DataPoint[track_sample.size()];
         DataPoint[] track_altitude = new DataPoint[track_sample.size()];
@@ -105,6 +107,7 @@ public class GraphActivity extends AppCompatActivity {
             track_speed[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getSpeed());
             avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
         }
+        */
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
         series.setTitle("HR");
         final LineGraphSeries<DataPoint> series_distance = new LineGraphSeries<>(track_distance);

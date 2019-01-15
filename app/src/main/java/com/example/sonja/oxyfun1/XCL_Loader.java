@@ -52,15 +52,15 @@ public class XCL_Loader extends AppCompatActivity {
     int count = 0;
     public ArrayList<Values> uploadData;
     ListView lvInternalStorage;
-    double[] distance=new double[1001];
-    double [] heartrate=new double[1001];
-    double [] t=new double[1001];
-    double [] v=new double[1001];
+    double[] distance=new double[1501];
+    double [] heartrate=new double[1501];
+    double [] t=new double[1501];
+    double [] v=new double[1501];
     String distance_str;
     String heartrate_str;
     String t_str;
     String v_str;
-
+    String Datei;
 
     public static int name_nr=1;
 
@@ -164,7 +164,8 @@ public class XCL_Loader extends AppCompatActivity {
 
         //declare input file
         File inputFile = new File(filePath);
-
+        Datei=filePath;
+        Log.d(TAG, "readExcelData: Filename " + Datei);
         try {
             InputStream inputStream = new FileInputStream(inputFile);
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
@@ -174,7 +175,7 @@ public class XCL_Loader extends AppCompatActivity {
             StringBuilder sb = new StringBuilder();
 
             //outer loop, loops through rows
-            for (int r = 2; r < 1000; r++) {
+            for (int r = 2; r < 1500; r++) {
                 Row row = sheet.getRow(r);
                 //int cellsCount = row.getPhysicalNumberOfCells();
                 //inner loop, loops through columns
@@ -266,14 +267,14 @@ public class XCL_Loader extends AppCompatActivity {
             //this.deleteDatabase("oxyfun");
             SQLiteDatabase db = oxyfunDatabaseHelper.getWritableDatabase();
             ContentValues contentValues=new ContentValues();
-            contentValues.put("Name","Messung");
+            contentValues.put("Name",Datei);
             contentValues.put("Distance",distance_str);
             contentValues.put("Heartrate",heartrate_str);
             contentValues.put("Altitude",0);
             contentValues.put("speed",v_str);
             long inserted=db.insert("Messungen",null, contentValues);
              toast = Toast.makeText(this, String.valueOf(inserted), Toast.LENGTH_SHORT);
-            toast.show();
+             toast.show();
         }catch(SQLiteException e) {
             toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();

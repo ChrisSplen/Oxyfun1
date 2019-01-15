@@ -173,6 +173,26 @@ public class XCL_Loader extends AppCompatActivity {
             FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
             StringBuilder sb = new StringBuilder();
 
+            int r=2;
+            Row row = sheet.getRow(r);
+            while(getCellAsString(row,1,formulaEvaluator)!=null){
+                //row = sheet.getRow(r); ist jetzt denke ich nicht mehr notwendig, nachdem am Ende der while-Schleife r inkrementiert wird
+                //int cellsCount = row.getPhysicalNumberOfCells();
+                //inner loop, loops through columns
+                for (int c = 0; c < 8; c++) {
+                    if( c==0 || c==2 || c==4 || c==7) {
+                        String value = getCellAsString(row, c, formulaEvaluator);
+                        String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
+                        Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
+                        sb.append(value + ", ");
+                    }
+                }
+                r++;
+                row = sheet.getRow(r);
+                sb.append(";");
+            }
+
+            /*
             //outer loop, loops through rows
             for (int r = 2; r < 1000; r++) {
                 Row row = sheet.getRow(r);
@@ -189,7 +209,7 @@ public class XCL_Loader extends AppCompatActivity {
                 sb.append(";");
             }
             Log.d(TAG, "readExcelData: STRINGBUILDER: " + sb.toString());
-
+*/
             parseStringBuilder(sb);
 
         }catch (FileNotFoundException e) {

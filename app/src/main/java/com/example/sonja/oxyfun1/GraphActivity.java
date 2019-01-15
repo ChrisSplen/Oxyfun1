@@ -12,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
@@ -49,14 +52,24 @@ public class GraphActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Switch altitudeSwitch = findViewById(R.id.AltitudeSwitch);
+        Switch speedSwitch = findViewById(R.id.SpeedSwitch);
+
+        Boolean atitudeIsOn=altitudeSwitch.isChecked();
+        Boolean speedIsOn=speedSwitch.isChecked();
+
+        altitudeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
 
         //Log.d("asdf",EXTRA_ID);
 
-
-
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        //read_csv();
-        read_excel();
+        read_csv();
+        //read_excel();
 
         int hr_avg = 0;
         int hr_sum = 0;
@@ -67,42 +80,51 @@ public class GraphActivity extends AppCompatActivity {
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
 
-
+/*
         DataPoint[] avg_line = new DataPoint[998];
-
         DataPoint[] track_array = new DataPoint[998];
         DataPoint[] track_altitude = new DataPoint[998];
         DataPoint[] track_distance = new DataPoint[998];
+        DataPoint[] track_speed = new DataPoint[998];
+
         for (int i = 0; i <= 998 - 1; i++) {
-            track_array[i] = new DataPoint(track_sample.get(i).getDistance(), track_sample.get(i).getHr());
+            track_array[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getHr());
             Log.d("asdf","track: "+String.valueOf(track_sample.get(i).getDistance())+" "+String.valueOf(track_sample.get(i).getHr()));
-            track_altitude[i] = new DataPoint(track_sample.get(i).getDistance(), track_sample.get(i).getAltitude());
+            track_altitude[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getAltitude());
             track_distance[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getDistance());
+            track_speed[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getSpeed());
             avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
         }
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
-  /*
+        series.setTitle("HR");
+  */
         DataPoint[] avg_line = new DataPoint[track_sample.size()];
         DataPoint[] track_array = new DataPoint[track_sample.size()];
         DataPoint[] track_altitude = new DataPoint[track_sample.size()];
         DataPoint[] track_distance = new DataPoint[track_sample.size()];
+        DataPoint[] track_speed = new DataPoint[track_sample.size()];
 
         for (int i = 0; i <= track_sample.size() - 1; i++) {
             track_array[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getHr());
+            Log.d("asdf","track: "+String.valueOf(track_sample.get(i).getDistance())+" "+String.valueOf(track_sample.get(i).getHr()));
             track_altitude[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getAltitude());
             track_distance[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getDistance());
-
+            track_speed[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getSpeed());
             avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
         }
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
+        series.setTitle("HR");
         LineGraphSeries<DataPoint> series_distance = new LineGraphSeries<>(track_distance);
-        */
-        LineGraphSeries<DataPoint> series_altitude = new LineGraphSeries<>(track_altitude);
-        LineGraphSeries<DataPoint> series_avg = new LineGraphSeries<DataPoint>(avg_line);
 
+        LineGraphSeries<DataPoint> series_altitude = new LineGraphSeries<>(track_altitude);
+        series_altitude.setTitle("Altitude");
+        LineGraphSeries<DataPoint> series_avg = new LineGraphSeries<DataPoint>(avg_line);
+        series_avg.setTitle("avg HR");
+        LineGraphSeries<DataPoint> series_speed = new LineGraphSeries<DataPoint>(track_speed);
+        series_avg.setTitle("speed");
 
         graph.setTitle("Heart-Rate Track");
-        graph.setTitleTextSize(80);
+        graph.setTitleTextSize(60);
 
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinY(100);
@@ -130,6 +152,7 @@ public class GraphActivity extends AppCompatActivity {
         // auf ebenen Strecken gemessen, wodurch die Höhenanzeige deutlich langweilig ist.
         //die Datei dist_hr und deren Abwandlung dist_hr1 (mit Zeitwerten) haben jedoch ein variiertes Höhenprofil
 ///*
+
         graph.getSecondScale().addSeries(series_altitude);
         graph.getSecondScale().setMinY(175);
         graph.getSecondScale().setMaxY(490);
@@ -205,7 +228,7 @@ public class GraphActivity extends AppCompatActivity {
 
 
     public void read_csv() {
-        InputStream is = getResources().openRawResource(R.raw.dist_hr);
+        InputStream is = getResources().openRawResource(R.raw.dist_hr_speed_alt_time_trenn);
         //InputStream is = getResources().openRawResource(R.raw.dist_hr1);
         BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8"))
@@ -222,7 +245,7 @@ public class GraphActivity extends AppCompatActivity {
                 sample.setHr(Integer.parseInt(tokens[1]));
                 sample.setAltitude(Integer.parseInt(tokens[2]));
                 sample.setTime(Integer.parseInt(tokens[3]));
-                sample.setSpeed(Integer.parseInt(tokens[4]));
+                sample.setSpeed(Float.parseFloat(tokens[4]));
                 track_sample.add(sample);
 
                 Log.d("MyActivity", "Just created " + sample);
@@ -233,6 +256,10 @@ public class GraphActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    //public void OnChecked
+
+
     public void read_excel(){
 
         int id=(Integer)getIntent().getExtras().get(EXTRA_ID);
@@ -290,4 +317,6 @@ public class GraphActivity extends AppCompatActivity {
         return array;
     }
 
+    public void onstartClearButtonClick(View view) {
+    }
 }

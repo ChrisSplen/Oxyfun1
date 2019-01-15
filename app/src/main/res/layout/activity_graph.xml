@@ -23,4 +23,22 @@
         android:layout_below="@+id/toolbar"
         />
 
+    <Switch
+        android:id="@+id/SpeedSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toolbar"
+        android:layout_alignParentStart="true"
+        android:text="Speed"
+        android:checked="false"/>
+
+    <Switch
+        android:id="@+id/AltitudeSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toolbar"
+        android:layout_toEndOf="@+id/SpeedSwitch"
+        android:text="Altitude"
+        android:checked="false"/>
+
 </RelativeLayout>

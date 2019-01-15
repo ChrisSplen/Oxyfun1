@@ -67,6 +67,7 @@ public class GraphActivity extends AppCompatActivity {
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
 
+
         DataPoint[] avg_line = new DataPoint[998];
 
         DataPoint[] track_array = new DataPoint[998];
@@ -77,7 +78,23 @@ public class GraphActivity extends AppCompatActivity {
             track_altitude[i] = new DataPoint(track_sample.get(i).getDistance(), track_sample.get(i).getAltitude());
             avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
         }
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array); //hier liegt der Hund begraben
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
+  /*
+        DataPoint[] avg_line = new DataPoint[track_sample.size()];
+        DataPoint[] track_array = new DataPoint[track_sample.size()];
+        DataPoint[] track_altitude = new DataPoint[track_sample.size()];
+        DataPoint[] track_distance = new DataPoint[track_sample.size()];
+
+        for (int i = 0; i <= track_sample.size() - 1; i++) {
+            track_array[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getHr());
+            track_altitude[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getAltitude());
+            track_distance[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getDistance());
+
+            avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
+        }
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
+        LineGraphSeries<DataPoint> series_distance = new LineGraphSeries<>(track_distance);
+        */
         LineGraphSeries<DataPoint> series_altitude = new LineGraphSeries<>(track_altitude);
         LineGraphSeries<DataPoint> series_avg = new LineGraphSeries<DataPoint>(avg_line);
 
@@ -91,7 +108,7 @@ public class GraphActivity extends AppCompatActivity {
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(4);
-        graph.getViewport().setMaxX(80);
+        graph.getViewport().setMaxX(300);
 
         // enable scaling and scrolling
         graph.getViewport().setScalable(true);
@@ -102,9 +119,21 @@ public class GraphActivity extends AppCompatActivity {
 
         graph.addSeries(series);
         graph.addSeries(series_avg);
+        /*
+        graph.getSecondScale().addSeries(series_distance);
+        graph.getSecondScale().setMinY(0);
+        graph.getSecondScale().setMaxY(1200);
+        */
+        //Je nach Strecke ist die Anzeige von Höhe an der Y-Achse deutlich sinnvoller. Die meisten Streckenbeispiele sind allerdings
+        // auf ebenen Strecken gemessen, wodurch die Höhenanzeige deutlich langweilig ist.
+        //die Datei dist_hr und deren Abwandlung dist_hr1 (mit Zeitwerten) haben jedoch ein variiertes Höhenprofil
+///*
         graph.getSecondScale().addSeries(series_altitude);
         graph.getSecondScale().setMinY(175);
         graph.getSecondScale().setMaxY(490);
+//*/
+
+
 
 
         //hier folgt Code für die Datenbank; ist nur eine Spielerei
@@ -174,8 +203,8 @@ public class GraphActivity extends AppCompatActivity {
 
 
     public void read_csv() {
-
-        InputStream is = getResources().openRawResource(R.raw.dist_hr);
+        //InputStream is = getResources().openRawResource(R.raw.dist_hr);
+        InputStream is = getResources().openRawResource(R.raw.dist_hr1);
         BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8"))
         );
@@ -190,6 +219,8 @@ public class GraphActivity extends AppCompatActivity {
                 sample.setDistance(Integer.parseInt(tokens[0]));
                 sample.setHr(Integer.parseInt(tokens[1]));
                 sample.setAltitude(Integer.parseInt(tokens[2]));
+                sample.setTime(Integer.parseInt(tokens[3]));
+                sample.setSpeed(Integer.parseInt(tokens[4]));
                 track_sample.add(sample);
 
                 Log.d("MyActivity", "Just created " + sample);

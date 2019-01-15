@@ -12,6 +12,7 @@
     <string name="go_home">Home</string>
     <string name="add_measurement">Add Measurement</string>
     <string name="view_measurement">View Measurement</string>
+    <string name="load_data">Dateien laden</string>
     <string-array name="data">
         <item>entry1</item>
         <item>entry2</item>

@@ -114,9 +114,7 @@ public class MeasurementActivity extends AppCompatActivity {
     private void changeVisibility(){ //wenn der User auf Stop klickt, sollen 2 Button erscheinen: Auswahl zum speichern und zum löschen
         Button button_save = (Button) findViewById(R.id.save_button);
         Button button_delete = (Button) findViewById(R.id.delete_button);
-        button_save.setVisibility(View.VISIBLE);
-        button_delete.setVisibility(View.VISIBLE);
-    }
+        button_save.setVisibility(View.VISIBLE);}
 
     public void onClickDeleteButton(View view){ //wenn User löschen klickt, dann Zeit auf 0 setzen und löschen/speichern Button auf invisible setzen
         Button button_delete = (Button) findViewById(R.id.delete_button);

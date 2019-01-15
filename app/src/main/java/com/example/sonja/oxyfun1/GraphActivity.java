@@ -60,19 +60,20 @@ public class GraphActivity extends AppCompatActivity {
 
         int hr_avg = 0;
         int hr_sum = 0;
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 998; i++) {
             hr_sum += track_sample.get(i).getHr();
         }
         hr_avg = hr_sum / 1000;
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
 
-        DataPoint[] avg_line = new DataPoint[1000];
+        DataPoint[] avg_line = new DataPoint[998];
 
-        DataPoint[] track_array = new DataPoint[1000];
-        DataPoint[] track_altitude = new DataPoint[1000];
-        for (int i = 0; i <= 1000 - 1; i++) {
+        DataPoint[] track_array = new DataPoint[998];
+        DataPoint[] track_altitude = new DataPoint[998];
+        for (int i = 0; i <= 998 - 1; i++) {
             track_array[i] = new DataPoint(track_sample.get(i).getDistance(), track_sample.get(i).getHr());
+            Log.d("asdf","track: "+String.valueOf(track_sample.get(i).getDistance())+" "+String.valueOf(track_sample.get(i).getHr()));
             track_altitude[i] = new DataPoint(track_sample.get(i).getDistance(), track_sample.get(i).getAltitude());
             avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
         }

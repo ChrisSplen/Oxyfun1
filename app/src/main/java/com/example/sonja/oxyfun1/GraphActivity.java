@@ -18,6 +18,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -53,11 +55,8 @@ public class GraphActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final Switch altitudeSwitch = findViewById(R.id.AltitudeSwitch);
-        Switch speedSwitch = findViewById(R.id.SpeedSwitch);
-
-        final Boolean altitudeIsOn=altitudeSwitch.isChecked();
-        final Boolean speedIsOn=speedSwitch.isChecked();
-
+        final Switch speedSwitch = findViewById(R.id.SpeedSwitch);
+        final Switch distanceSwitch = findViewById(R.id.DistanceSwitch);
 
 
         //Log.d("asdf",EXTRA_ID);
@@ -108,17 +107,15 @@ public class GraphActivity extends AppCompatActivity {
         }
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
         series.setTitle("HR");
-        LineGraphSeries<DataPoint> series_distance = new LineGraphSeries<>(track_distance);
-
+        final LineGraphSeries<DataPoint> series_distance = new LineGraphSeries<>(track_distance);
         final LineGraphSeries<DataPoint> series_altitude = new LineGraphSeries<>(track_altitude);
-        series_altitude.setTitle("Altitude");
-        LineGraphSeries<DataPoint> series_avg = new LineGraphSeries<DataPoint>(avg_line);
-        series_avg.setTitle("avg HR");
         final LineGraphSeries<DataPoint> series_speed = new LineGraphSeries<DataPoint>(track_speed);
-        series_avg.setTitle("speed");
+        LineGraphSeries<DataPoint> series_avg = new LineGraphSeries<DataPoint>(avg_line);
+        series_altitude.setTitle("Altitude");
+        series_avg.setTitle("avg HR");
 
-        graph.setTitle("Heart-Rate Track");
-        graph.setTitleTextSize(60);
+        graph.setTitle("Heart Rate Track");
+        graph.setTitleTextSize(50);
 
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinY(100);
@@ -127,6 +124,9 @@ public class GraphActivity extends AppCompatActivity {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(4);
         graph.getViewport().setMaxX(300);
+
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("time [s]");
+        graph.getGridLabelRenderer().setVerticalAxisTitle("heart rate [bpm]");
 
         // enable scaling and scrolling
         graph.getViewport().setScalable(true);
@@ -140,80 +140,93 @@ public class GraphActivity extends AppCompatActivity {
         graph.addSeries(series);
         graph.addSeries(series_avg);
 
-        /*
-        graph.getSecondScale().addSeries(series_distance);
-        graph.getSecondScale().setMinY(0);
-        graph.getSecondScale().setMaxY(1200);
-        */
-        //Je nach Strecke ist die Anzeige von Höhe an der Y-Achse deutlich sinnvoller. Die meisten Streckenbeispiele sind allerdings
-        // auf ebenen Strecken gemessen, wodurch die Höhenanzeige deutlich langweilig ist.
-        //die Datei dist_hr und deren Abwandlung dist_hr1 (mit Zeitwerten) haben jedoch ein variiertes Höhenprofil
-///*
-
-//*/
-
-
-
-
-        //hier folgt Code für die Datenbank; ist nur eine Spielerei
-        /*
-        //Create a cursor
-
-        TextView test = (TextView) findViewById(R.id.textView); //zum Testen wo Fehler liegt, da ich keinen Plan vom richtigen Debuggen habe
-        SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
-        try {
-            SQLiteDatabase db = oxyfunDatabaseHelper.getReadableDatabase();
-            Cursor cursor = db.query("Messungen",
-                    new String[]{"Date"},
-                    "_id = ?",
-                    new String[]{Integer.toString(1)},
-                    null, null, null);
-            //Move to the first record in the Cursor
-
-            if (cursor.moveToFirst()) {
-//Get the details from the cursor
-                String datum = cursor.getString(0);
-                test.setText(datum);
-            }
-            test.setText(Boolean.toString(cursor.moveToFirst()));
-            cursor.close();
-            db.close();
-        } catch (SQLiteException e) {
-            Toast toast = Toast.makeText(this,
-                    "Database unavailable",
-                    Toast.LENGTH_SHORT);
-            toast.show();
-        }
-        oxyfunDatabaseHelper.close();
-        this.deleteDatabase("oxyfun"); //hier wird die Datenbank gelöscht, ist hilfreich wenn man nicht immer neue Versionsnummern macht beim testen
-        */
 
         altitudeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                graph.removeSeries(series_altitude);
-                graph.removeSeries(series_speed);
-                graph.clearSecondScale();
+                if(!isChecked){
+                    graph.clearSecondScale();
+                    graph.getSecondScale().removeSeries(series_altitude);
+                }
+
                 if(isChecked) {
+                    speedSwitch.setChecked(false);
+                    distanceSwitch.setChecked(false);
+
+                    graph.getSecondScale().removeSeries(series_altitude);
+                    graph.getSecondScale().removeSeries(series_speed);
+                    graph.getSecondScale().removeSeries(series_distance);
+                    graph.clearSecondScale();
+
                     graph.getSecondScale().addSeries(series_altitude);
+                    graph.getSecondScale().isYAxisBoundsManual();
                     graph.getSecondScale().setMinY(175);
-                    graph.getSecondScale().setMaxY(190);
+                    graph.getSecondScale().setMaxY(380);
+                    series_altitude.setTitle("altitude [m]");
+                    graph.getSecondScale().setVerticalAxisTitle("altitude \n [m]");
+                    //graph.getGridLabelRenderer().invalidate(true,true);
                 }
             }
         });
         speedSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                graph.removeSeries(series_altitude);
-                graph.removeSeries(series_speed);
-                graph.clearSecondScale();
+                if(!isChecked){
+                    graph.clearSecondScale();
+                    graph.getSecondScale().removeSeries(series_speed);
+                }
+
                 if(isChecked) {
+                    distanceSwitch.setChecked(false);
+                    altitudeSwitch.setChecked(false);
+
+                    graph.getSecondScale().removeSeries(series_altitude);
+                    graph.getSecondScale().removeSeries(series_speed);
+                    graph.getSecondScale().removeSeries(series_distance);
+                    graph.clearSecondScale();
+
                     graph.getSecondScale().addSeries(series_speed);
                     graph.getSecondScale().setMinY(0);
                     graph.getSecondScale().setMaxY(4.5);
+                    series_speed.setTitle("speed [m/s]");
+                    graph.getSecondScale().setVerticalAxisTitle("speed \n [m/s]");
+                    //graph.getGridLabelRenderer().invalidate(true,true);
                 }
             }
         });
+        distanceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!isChecked){
+                    graph.clearSecondScale();
+                    graph.getSecondScale().removeSeries(series_distance);
+                }
+                if(isChecked) {
+                    speedSwitch.setChecked(false);
+                    altitudeSwitch.setChecked(false);
+
+                    graph.getSecondScale().removeSeries(series_altitude);
+                    graph.getSecondScale().removeSeries(series_speed);
+                    graph.getSecondScale().removeSeries(series_distance);
+                    graph.clearSecondScale();
+
+                    graph.getSecondScale().addSeries(series_distance);
+                    graph.getSecondScale().setMinY(0);
+                    graph.getSecondScale().setMaxY(10000);
+                    series_distance.setTitle("distance [m]");
+                    graph.getSecondScale().setVerticalAxisTitle("distance\n [m]");
+                    //graph.getGridLabelRenderer().invalidate(true,true);
+                }
+            }
+        });
+
+        graph.getLegendRenderer().setPadding(10);
+        graph.getLegendRenderer().setTextSize(20);
+        graph.getLegendRenderer().setWidth(145);
+        graph.getLegendRenderer().setVisible(true);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+
+        graph.getGridLabelRenderer().setHumanRounding(true);
     }
 
     @Override

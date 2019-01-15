@@ -52,18 +52,13 @@ public class GraphActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Switch altitudeSwitch = findViewById(R.id.AltitudeSwitch);
+        final Switch altitudeSwitch = findViewById(R.id.AltitudeSwitch);
         Switch speedSwitch = findViewById(R.id.SpeedSwitch);
 
-        Boolean atitudeIsOn=altitudeSwitch.isChecked();
-        Boolean speedIsOn=speedSwitch.isChecked();
+        final Boolean altitudeIsOn=altitudeSwitch.isChecked();
+        final Boolean speedIsOn=speedSwitch.isChecked();
 
-        altitudeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-            }
-        });
 
         //Log.d("asdf",EXTRA_ID);
 
@@ -78,8 +73,7 @@ public class GraphActivity extends AppCompatActivity {
         }
         hr_avg = hr_sum / 1000;
 
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-
+        final GraphView graph = (GraphView) findViewById(R.id.graph);
 /*
         DataPoint[] avg_line = new DataPoint[998];
         DataPoint[] track_array = new DataPoint[998];
@@ -116,11 +110,11 @@ public class GraphActivity extends AppCompatActivity {
         series.setTitle("HR");
         LineGraphSeries<DataPoint> series_distance = new LineGraphSeries<>(track_distance);
 
-        LineGraphSeries<DataPoint> series_altitude = new LineGraphSeries<>(track_altitude);
+        final LineGraphSeries<DataPoint> series_altitude = new LineGraphSeries<>(track_altitude);
         series_altitude.setTitle("Altitude");
         LineGraphSeries<DataPoint> series_avg = new LineGraphSeries<DataPoint>(avg_line);
         series_avg.setTitle("avg HR");
-        LineGraphSeries<DataPoint> series_speed = new LineGraphSeries<DataPoint>(track_speed);
+        final LineGraphSeries<DataPoint> series_speed = new LineGraphSeries<DataPoint>(track_speed);
         series_avg.setTitle("speed");
 
         graph.setTitle("Heart-Rate Track");
@@ -139,7 +133,9 @@ public class GraphActivity extends AppCompatActivity {
         graph.getViewport().setScalableY(true);
 
         series.setColor(Color.RED);
-        series_speed.setColor(Color.GREEN);
+        series_avg.setColor(Color.RED);
+        series_speed.setColor(Color.BLACK);
+        series_altitude.setColor(Color.BLUE);
 
         graph.addSeries(series);
         graph.addSeries(series_avg);
@@ -154,9 +150,6 @@ public class GraphActivity extends AppCompatActivity {
         //die Datei dist_hr und deren Abwandlung dist_hr1 (mit Zeitwerten) haben jedoch ein variiertes Höhenprofil
 ///*
 
-        graph.getSecondScale().addSeries(series_altitude);
-        graph.getSecondScale().setMinY(175);
-        graph.getSecondScale().setMaxY(490);
 //*/
 
 
@@ -195,6 +188,32 @@ public class GraphActivity extends AppCompatActivity {
         this.deleteDatabase("oxyfun"); //hier wird die Datenbank gelöscht, ist hilfreich wenn man nicht immer neue Versionsnummern macht beim testen
         */
 
+        altitudeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                graph.removeSeries(series_altitude);
+                graph.removeSeries(series_speed);
+                graph.clearSecondScale();
+                if(isChecked) {
+                    graph.getSecondScale().addSeries(series_altitude);
+                    graph.getSecondScale().setMinY(175);
+                    graph.getSecondScale().setMaxY(190);
+                }
+            }
+        });
+        speedSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                graph.removeSeries(series_altitude);
+                graph.removeSeries(series_speed);
+                graph.clearSecondScale();
+                if(isChecked) {
+                    graph.getSecondScale().addSeries(series_speed);
+                    graph.getSecondScale().setMinY(0);
+                    graph.getSecondScale().setMaxY(4.5);
+                }
+            }
+        });
     }
 
     @Override
@@ -246,7 +265,7 @@ public class GraphActivity extends AppCompatActivity {
                 sample.setHr(Integer.parseInt(tokens[1]));
                 sample.setAltitude(Integer.parseInt(tokens[2]));
                 sample.setTime(Integer.parseInt(tokens[3]));
-                sample.setSpeed(Float.parseFloat(tokens[4]));
+                sample.setSpeed(Double.parseDouble(tokens[4]));
                 track_sample.add(sample);
 
                 Log.d("MyActivity", "Just created " + sample);

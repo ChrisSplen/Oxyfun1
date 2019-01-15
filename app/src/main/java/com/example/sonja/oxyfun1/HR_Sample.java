@@ -7,7 +7,7 @@ class HR_Sample {
     private int distance;
     private int hr;
     private int altitude;
-    private float speed;
+    private double speed;
     private int time;
 
 
@@ -35,9 +35,9 @@ class HR_Sample {
 
     public void setTime(int time) {this.time = time;}
 
-    public float getSpeed() { return speed; }
+    public double getSpeed() { return speed; }
 
-    public void setSpeed(float speed) {this.speed = speed;}
+    public void setSpeed(double speed) {this.speed = speed;}
 
     @Override
     public String toString() {

@@ -144,78 +144,57 @@ public class GraphActivity extends AppCompatActivity {
         altitudeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                graph.clearSecondScale();
                 if(!isChecked){
-                    graph.clearSecondScale();
                     graph.getSecondScale().removeSeries(series_altitude);
                 }
 
                 if(isChecked) {
-                    speedSwitch.setChecked(false);
                     distanceSwitch.setChecked(false);
-
-                    graph.getSecondScale().removeSeries(series_altitude);
-                    graph.getSecondScale().removeSeries(series_speed);
-                    graph.getSecondScale().removeSeries(series_distance);
-                    graph.clearSecondScale();
-
+                    speedSwitch.setChecked(false);
                     graph.getSecondScale().addSeries(series_altitude);
                     graph.getSecondScale().isYAxisBoundsManual();
                     graph.getSecondScale().setMinY(175);
                     graph.getSecondScale().setMaxY(380);
                     series_altitude.setTitle("altitude [m]");
                     graph.getSecondScale().setVerticalAxisTitle("altitude \n [m]");
-                    //graph.getGridLabelRenderer().invalidate(true,true);
                 }
             }
         });
         speedSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                graph.clearSecondScale();
                 if(!isChecked){
-                    graph.clearSecondScale();
                     graph.getSecondScale().removeSeries(series_speed);
                 }
 
                 if(isChecked) {
                     distanceSwitch.setChecked(false);
                     altitudeSwitch.setChecked(false);
-
-                    graph.getSecondScale().removeSeries(series_altitude);
-                    graph.getSecondScale().removeSeries(series_speed);
-                    graph.getSecondScale().removeSeries(series_distance);
-                    graph.clearSecondScale();
-
                     graph.getSecondScale().addSeries(series_speed);
                     graph.getSecondScale().setMinY(0);
                     graph.getSecondScale().setMaxY(4.5);
                     series_speed.setTitle("speed [m/s]");
                     graph.getSecondScale().setVerticalAxisTitle("speed \n [m/s]");
-                    //graph.getGridLabelRenderer().invalidate(true,true);
                 }
             }
         });
         distanceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                graph.clearSecondScale();
                 if(!isChecked){
-                    graph.clearSecondScale();
                     graph.getSecondScale().removeSeries(series_distance);
                 }
                 if(isChecked) {
                     speedSwitch.setChecked(false);
                     altitudeSwitch.setChecked(false);
-
-                    graph.getSecondScale().removeSeries(series_altitude);
-                    graph.getSecondScale().removeSeries(series_speed);
-                    graph.getSecondScale().removeSeries(series_distance);
-                    graph.clearSecondScale();
-
                     graph.getSecondScale().addSeries(series_distance);
                     graph.getSecondScale().setMinY(0);
                     graph.getSecondScale().setMaxY(10000);
                     series_distance.setTitle("distance [m]");
                     graph.getSecondScale().setVerticalAxisTitle("distance\n [m]");
-                    //graph.getGridLabelRenderer().invalidate(true,true);
                 }
             }
         });

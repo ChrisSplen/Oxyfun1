@@ -139,10 +139,11 @@ public class GraphActivity extends AppCompatActivity {
         graph.getViewport().setScalableY(true);
 
         series.setColor(Color.RED);
-        series_avg.setColor(Color.GREEN);
+        series_speed.setColor(Color.GREEN);
 
         graph.addSeries(series);
         graph.addSeries(series_avg);
+
         /*
         graph.getSecondScale().addSeries(series_distance);
         graph.getSecondScale().setMinY(0);
@@ -315,8 +316,5 @@ public class GraphActivity extends AppCompatActivity {
 
         }
         return array;
-    }
-
-    public void onstartClearButtonClick(View view) {
     }
 }

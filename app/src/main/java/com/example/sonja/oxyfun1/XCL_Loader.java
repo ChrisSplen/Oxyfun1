@@ -190,7 +190,7 @@ public class XCL_Loader extends AppCompatActivity {
                 }
 
 
-                for (int r = 2; r < 1500; r++) {
+                for (int r = 2; r < 4000; r++) {
                  row = sheet.getRow(r);
                 //int cellsCount = row.getPhysicalNumberOfCells();
                 for (int c = startspalte; c < (startspalte+8); c++) {

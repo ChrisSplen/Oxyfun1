@@ -98,7 +98,7 @@ public class GraphActivity extends AppCompatActivity {
 
         for (int i = 0; i <= track_sample.size() - 1; i++) {
             track_array[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getHr());
-            Log.d("asdf","track: "+String.valueOf(track_sample.get(i).getDistance())+" "+String.valueOf(track_sample.get(i).getHr()));
+            Log.d("asdf","track: "+String.valueOf(track_sample.get(i).getDistance())+" "+String.valueOf(track_sample.get(i).getHr())+" "+i);
             track_altitude[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getAltitude());
             track_distance[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getDistance());
             track_speed[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getSpeed());
@@ -281,7 +281,7 @@ public class GraphActivity extends AppCompatActivity {
                     "_id = ?",
                     new String[]{Integer.toString(id)},
                     null, null, null);
-            for(int i=0;i<1000;i++){
+            for(int i=0;i<3000;i++){
                 HR_Sample sample = new HR_Sample();
 
                 if (cursor.moveToFirst()) {
@@ -296,9 +296,16 @@ public class GraphActivity extends AppCompatActivity {
 
                     Log.d("wtf",String.valueOf(string2array(cursor.getString(0))[i]));
                    // Log.d("asdf",String.valueOf(sample.getDistance()));
+
+
                 }
+
                 track_sample.add(sample);
                 Log.d("asdf", "Just created " + sample);
+
+                if(sample.getDistance() == 0 && sample.getHr()==0){
+                    break;
+                }
             }
             cursor.close();
             db.close();
@@ -320,7 +327,7 @@ public class GraphActivity extends AppCompatActivity {
         String[] stringarray=arraystring.split(",");
         int[] array=new int[arraystring.length()];
         double[] double_array=new double[arraystring.length()];
-        for (int i=0; i<1000;i++){
+        for (int i=0; i<3000;i++){
 
             double_array[i]=Double.valueOf(stringarray[i]);
             array[i]=(int)(double_array[i]);
@@ -332,7 +339,7 @@ public class GraphActivity extends AppCompatActivity {
 
         String[] stringarray=arraystring.split(",");
         double[] array=new double[arraystring.length()];
-        for (int i=0; i<1000;i++){
+        for (int i=0; i<3000;i++){
             array[i]=Double.valueOf(stringarray[i]);
         }
         return array;

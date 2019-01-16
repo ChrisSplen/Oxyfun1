@@ -17,7 +17,9 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.nio.file.Files.createLink;
 import static java.nio.file.Files.size;
 import static org.apache.xmlbeans.impl.piccolo.xml.AttributeDefinition.ID;
 
@@ -70,6 +73,10 @@ public class GraphActivity extends AppCompatActivity {
         hr_avg = hr_sum / 1000;
 
         final GraphView graph = (GraphView) findViewById(R.id.graph);
+        graph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.VERTICAL);
+        final GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
+
+
 /*
         DataPoint[] avg_line = new DataPoint[998];
         DataPoint[] track_array = new DataPoint[998];
@@ -139,6 +146,7 @@ public class GraphActivity extends AppCompatActivity {
 
         graph.addSeries(series);
         graph.addSeries(series_avg);
+        //graph.getGridLabelRenderer().setNumVerticalLabels(13);
 
 
         altitudeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -147,14 +155,22 @@ public class GraphActivity extends AppCompatActivity {
                 graph.clearSecondScale();
                 if(!isChecked){
                     graph.getSecondScale().removeSeries(series_altitude);
+                    speedSwitch.setClickable(true);
+                    distanceSwitch.setClickable(true);
                 }
 
                 if(isChecked) {
+                    speedSwitch.setClickable(false);
+                    distanceSwitch.setClickable(false);
                     distanceSwitch.setChecked(false);
+                    graph.getSecondScale().removeSeries(series_distance);
+                    graph.getSecondScale().removeSeries(series_speed);
                     speedSwitch.setChecked(false);
+
                     graph.getSecondScale().addSeries(series_altitude);
                     graph.getSecondScale().setMinY(175);
                     graph.getSecondScale().setMaxY(380);
+
                     series_altitude.setTitle("altitude [m]");
                     graph.getSecondScale().setVerticalAxisTitle("altitude \n [m]");
                 }
@@ -166,11 +182,18 @@ public class GraphActivity extends AppCompatActivity {
                 graph.clearSecondScale();
                 if(!isChecked){
                     graph.getSecondScale().removeSeries(series_speed);
+                    distanceSwitch.setClickable(true);
+                    altitudeSwitch.setClickable(true);
                 }
 
                 if(isChecked) {
+                    distanceSwitch.setClickable(false);
+                    altitudeSwitch.setClickable(false);
                     distanceSwitch.setChecked(false);
                     altitudeSwitch.setChecked(false);
+                    graph.getSecondScale().removeSeries(series_distance);
+                    graph.getSecondScale().removeSeries(series_altitude);
+
                     graph.getSecondScale().addSeries(series_speed);
                     graph.getSecondScale().setMinY(0);
                     graph.getSecondScale().setMaxY(4.5);
@@ -185,10 +208,18 @@ public class GraphActivity extends AppCompatActivity {
                 graph.clearSecondScale();
                 if(!isChecked){
                     graph.getSecondScale().removeSeries(series_distance);
+                    speedSwitch.setClickable(true);
+                    altitudeSwitch.setClickable(true);
                 }
                 if(isChecked) {
+                    speedSwitch.setClickable(false);
+                    altitudeSwitch.setClickable(false);
                     speedSwitch.setChecked(false);
                     altitudeSwitch.setChecked(false);
+                    graph.getSecondScale().removeSeries(series_speed);
+                    graph.getSecondScale().removeSeries(series_altitude);
+
+                    graph.getSecondScale().getLabelFormatter();
                     graph.getSecondScale().addSeries(series_distance);
                     graph.getSecondScale().setMinY(0);
                     graph.getSecondScale().setMaxY(10000);
@@ -199,11 +230,11 @@ public class GraphActivity extends AppCompatActivity {
         });
 
         graph.getLegendRenderer().setPadding(10);
-        graph.getLegendRenderer().setTextSize(20);
-        graph.getLegendRenderer().setWidth(145);
+        graph.getLegendRenderer().setTextSize(25);
+        graph.getLegendRenderer().setWidth(178);
         graph.getLegendRenderer().setVisible(true);
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-
+        graph.getGridLabelRenderer().setSecondScaleLabelVerticalWidth(200);
         graph.getGridLabelRenderer().setHumanRounding(true);
     }
 

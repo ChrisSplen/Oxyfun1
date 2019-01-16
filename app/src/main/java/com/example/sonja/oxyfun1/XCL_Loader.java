@@ -173,7 +173,7 @@ public class XCL_Loader extends AppCompatActivity {
             //int rowsCount = sheet.getPhysicalNumberOfRows();
             FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
             StringBuilder sb = new StringBuilder();
-
+            /*
             int r=2;
             Row row = sheet.getRow(r);
             while(getCellAsString(row,1,formulaEvaluator)!=null){
@@ -192,8 +192,8 @@ public class XCL_Loader extends AppCompatActivity {
                 row = sheet.getRow(r);
                 sb.append(";");
             }
+            */
 
-            /*
             //outer loop, loops through rows
             for (int r = 2; r < 1500; r++) {
                 Row row = sheet.getRow(r);
@@ -210,7 +210,7 @@ public class XCL_Loader extends AppCompatActivity {
                 sb.append(";");
             }
             Log.d(TAG, "readExcelData: STRINGBUILDER: " + sb.toString());
-*/
+
             parseStringBuilder(sb);
 
         }catch (FileNotFoundException e) {

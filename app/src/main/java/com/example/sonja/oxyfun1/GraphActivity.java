@@ -289,7 +289,7 @@ public class GraphActivity extends AppCompatActivity {
 
                     sample.setDistance(string2array(cursor.getString(0))[i]);
                     sample.setHr(string2array(cursor.getString(1))[i]);
-                    sample.setAltitude(0);
+                    sample.setAltitude(string2array(cursor.getString(2))[i]);
                     sample.setSpeed(string2array_double(cursor.getString(3))[i]);
                     sample.setTime(i+1);
                     //

@@ -56,10 +56,12 @@ public class XCL_Loader extends AppCompatActivity {
     double [] heartrate=new double[5000];
     double [] t=new double[5000];
     double [] v=new double[5000];
+    double [] h=new double[5000];
     String distance_str;
     String heartrate_str;
     String t_str;
     String v_str;
+    String h_str;
     String Datei;
     Toast toast;
     int startspalte;
@@ -264,11 +266,13 @@ public class XCL_Loader extends AppCompatActivity {
             double pulse = uploadData.get(i).getPulse();
             double time = uploadData.get(i).getTime();
             double speed = uploadData.get(i).getSpeed();
+            double alt=uploadData.get(i).getAlt();
             Log.d(TAG, "printDataToLog: (dist, pulse, time , speed): (" + dist + "," + pulse + "," + time +"," + speed + ")");
             distance[i] = uploadData.get(i).getDist();
             heartrate [i]= uploadData.get(i).getPulse();
             t [i]= uploadData.get(i).getTime();
             v[i] = uploadData.get(i).getSpeed();
+            h[i]=uploadData.get(i).getAlt();
 
         }
         //toast= Toast.makeText(this, Double.toString(v[50]), Toast.LENGTH_LONG);
@@ -277,6 +281,8 @@ public class XCL_Loader extends AppCompatActivity {
         heartrate_str=array2string(heartrate);
         t_str=array2string(t);
         v_str=array2string(v);
+        h_str=array2string(h);
+
 
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
@@ -286,7 +292,7 @@ public class XCL_Loader extends AppCompatActivity {
             contentValues.put("Name",Datei);
             contentValues.put("Distance",distance_str);
             contentValues.put("Heartrate",heartrate_str);
-            contentValues.put("Altitude",0);
+            contentValues.put("Altitude",h_str);
             contentValues.put("speed",v_str);
             long inserted=db.insert("Messungen",null, contentValues);
              toast = Toast.makeText(this,"data loaded successfully", Toast.LENGTH_LONG);

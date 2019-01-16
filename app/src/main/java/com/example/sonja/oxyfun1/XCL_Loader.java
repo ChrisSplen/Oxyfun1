@@ -52,10 +52,10 @@ public class XCL_Loader extends AppCompatActivity {
     int count = 0;
     public ArrayList<Values> uploadData;
     ListView lvInternalStorage;
-    double[] distance=new double[1501];
-    double [] heartrate=new double[1501];
-    double [] t=new double[1501];
-    double [] v=new double[1501];
+    double[] distance=new double[5000];
+    double [] heartrate=new double[5000];
+    double [] t=new double[5000];
+    double [] v=new double[5000];
     String distance_str;
     String heartrate_str;
     String t_str;
@@ -175,6 +175,8 @@ public class XCL_Loader extends AppCompatActivity {
             //int rowsCount = sheet.getPhysicalNumberOfRows();
             FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
             StringBuilder sb = new StringBuilder();
+            int rowsCount = sheet.getPhysicalNumberOfRows();
+
 
                 Row row = sheet.getRow(0);
                 for (int c = 0; c < 400; c++) {
@@ -186,7 +188,7 @@ public class XCL_Loader extends AppCompatActivity {
                 }
 
 
-                for (int r = 2; r < 1500; r++) {
+                for (int r = 2; r < rowsCount; r++) {
                  row = sheet.getRow(r);
                 //int cellsCount = row.getPhysicalNumberOfCells();
                 for (int c = startspalte; c < (startspalte+8); c++) {

@@ -190,7 +190,7 @@ public class XCL_Loader extends AppCompatActivity {
                 }
 
 
-                for (int r = 2; r < rowsCount; r++) {
+                for (int r = 2; r < 1500; r++) {
                  row = sheet.getRow(r);
                 //int cellsCount = row.getPhysicalNumberOfCells();
                 for (int c = startspalte; c < (startspalte+8); c++) {
@@ -309,20 +309,31 @@ public class XCL_Loader extends AppCompatActivity {
      */
     private String getCellAsString(Row row, int c, FormulaEvaluator formulaEvaluator) {
         String value = "";
+        Cell cell = row.getCell(c);
+        CellValue cellValue = formulaEvaluator.evaluate(cell);
         try {
-            Cell cell = row.getCell(c);
-            CellValue cellValue = formulaEvaluator.evaluate(cell);
+            switch (cellValue.getCellType()) {
+                case Cell.CELL_TYPE_NUMERIC:
+                    double numericValue = cellValue.getNumberValue();
 
-            String buffa = cellValue.getStringValue();
-            char[] chars = buffa.toCharArray();
-            String targetDate = new String(chars, 11, 8);
-            String[] tokens = targetDate.split(":");
-            int hours = Integer.parseInt(tokens[0]);
-            int minutes = Integer.parseInt(tokens[1]);
-            int seconds = Integer.parseInt(tokens[2]);
-            int duration = 3600 * hours + 60 * minutes + seconds;
-            value = "" + duration;
+                    value = "" + numericValue;
 
+                    break;
+
+                case Cell.CELL_TYPE_STRING:
+
+                    String buffa = cellValue.getStringValue();
+                    char[] chars = buffa.toCharArray();
+                    String targetDate = new String(chars, 11, 8);
+                    String[] tokens = targetDate.split(":");
+                    int hours = Integer.parseInt(tokens[0]);
+                    int minutes = Integer.parseInt(tokens[1]);
+                    int seconds = Integer.parseInt(tokens[2]);
+                    int duration = 3600 * hours + 60 * minutes + seconds;
+                    value = "" + duration;
+                    break;
+                default:
+            }
 
         } catch (NullPointerException e) {
 

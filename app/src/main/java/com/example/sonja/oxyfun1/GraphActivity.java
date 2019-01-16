@@ -73,7 +73,7 @@ public class GraphActivity extends AppCompatActivity {
         hr_avg = hr_sum / 1000;
 
         final GraphView graph = (GraphView) findViewById(R.id.graph);
-
+/*
         DataPoint[] avg_line = new DataPoint[998];
         DataPoint[] track_array = new DataPoint[998];
         DataPoint[] track_altitude = new DataPoint[998];
@@ -86,13 +86,13 @@ public class GraphActivity extends AppCompatActivity {
             track_altitude[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getAltitude());
             track_distance[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getDistance());
             track_speed[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getSpeed());
-            avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
+            avg_line[i] = new DataPoint(track_sample.get(i).getTime(), hr_avg);
         }
         /*
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
         series.setTitle("HR");
   */
-/*
+
         DataPoint[] avg_line = new DataPoint[track_sample.size()];
         DataPoint[] track_array = new DataPoint[track_sample.size()];
         DataPoint[] track_altitude = new DataPoint[track_sample.size()];
@@ -105,9 +105,9 @@ public class GraphActivity extends AppCompatActivity {
             track_altitude[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getAltitude());
             track_distance[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getDistance());
             track_speed[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getSpeed());
-            avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
+            avg_line[i] = new DataPoint(track_sample.get(i).getTime(), hr_avg);
         }
-        */
+
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
         series.setTitle("HR");
         final LineGraphSeries<DataPoint> series_distance = new LineGraphSeries<>(track_distance);
@@ -156,7 +156,6 @@ public class GraphActivity extends AppCompatActivity {
                     distanceSwitch.setChecked(false);
                     speedSwitch.setChecked(false);
                     graph.getSecondScale().addSeries(series_altitude);
-                    graph.getSecondScale().isYAxisBoundsManual();
                     graph.getSecondScale().setMinY(175);
                     graph.getSecondScale().setMaxY(380);
                     series_altitude.setTitle("altitude [m]");

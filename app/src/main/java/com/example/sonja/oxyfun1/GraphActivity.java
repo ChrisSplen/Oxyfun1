@@ -46,7 +46,7 @@ public class GraphActivity extends AppCompatActivity {
     public static final String EXTRA_ID = "ID"; //ist eine Konstante
 
     //int id=(Integer)getIntent().getExtras().get(EXTRA_ID);
-
+    Toast toast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -273,13 +273,12 @@ public class GraphActivity extends AppCompatActivity {
 
 
     public void read_excel(){
-
         int id=(Integer)getIntent().getExtras().get(EXTRA_ID);
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
             SQLiteDatabase db = oxyfunDatabaseHelper.getReadableDatabase();
             Cursor cursor = db.query("Messungen",
-                    new String[]{"Distance","Heartrate","Altitude","Speed"},
+                    new String[]{"Distance","Heartrate","Altitude","Speed","Time"},
                     "_id = ?",
                     new String[]{Integer.toString(id)},
                     null, null, null);
@@ -293,8 +292,10 @@ public class GraphActivity extends AppCompatActivity {
                     sample.setHr(string2array(cursor.getString(1))[i]);
                     sample.setAltitude(0);
                     sample.setSpeed(string2array_double(cursor.getString(3))[i]);
+                    sample.setTime(i+1);
                     //
-                    //Log.d("asdf",String.valueOf(string2array(cursor.getString(0))[i]));
+
+                    Log.d("wtf",String.valueOf(string2array(cursor.getString(0))[i]));
                    // Log.d("asdf",String.valueOf(sample.getDistance()));
                 }
                 track_sample.add(sample);
@@ -304,7 +305,7 @@ public class GraphActivity extends AppCompatActivity {
             db.close();
 
         } catch (SQLiteException e) {
-            Toast toast = Toast.makeText(this,
+            toast = Toast.makeText(this,
                     "Database unavailable",
                     Toast.LENGTH_SHORT);
             toast.show();

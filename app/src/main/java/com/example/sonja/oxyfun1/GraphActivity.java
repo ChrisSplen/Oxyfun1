@@ -46,7 +46,7 @@ public class GraphActivity extends AppCompatActivity {
     public static final String EXTRA_ID = "ID"; //ist eine Konstante
 
     //int id=(Integer)getIntent().getExtras().get(EXTRA_ID);
-
+    Toast toast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +70,7 @@ public class GraphActivity extends AppCompatActivity {
         hr_avg = hr_sum / 1000;
 
         final GraphView graph = (GraphView) findViewById(R.id.graph);
-
+/*
         DataPoint[] avg_line = new DataPoint[998];
         DataPoint[] track_array = new DataPoint[998];
         DataPoint[] track_altitude = new DataPoint[998];
@@ -83,13 +83,13 @@ public class GraphActivity extends AppCompatActivity {
             track_altitude[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getAltitude());
             track_distance[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getDistance());
             track_speed[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getSpeed());
-            avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
+            avg_line[i] = new DataPoint(track_sample.get(i).getTime(), hr_avg);
         }
         /*
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
         series.setTitle("HR");
   */
-/*
+
         DataPoint[] avg_line = new DataPoint[track_sample.size()];
         DataPoint[] track_array = new DataPoint[track_sample.size()];
         DataPoint[] track_altitude = new DataPoint[track_sample.size()];
@@ -102,9 +102,9 @@ public class GraphActivity extends AppCompatActivity {
             track_altitude[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getAltitude());
             track_distance[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getDistance());
             track_speed[i] = new DataPoint(track_sample.get(i).getTime(), track_sample.get(i).getSpeed());
-            avg_line[i] = new DataPoint(track_sample.get(i).getDistance(), hr_avg);
+            avg_line[i] = new DataPoint(track_sample.get(i).getTime(), hr_avg);
         }
-        */
+
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(track_array);
         series.setTitle("HR");
         final LineGraphSeries<DataPoint> series_distance = new LineGraphSeries<>(track_distance);
@@ -153,7 +153,6 @@ public class GraphActivity extends AppCompatActivity {
                     distanceSwitch.setChecked(false);
                     speedSwitch.setChecked(false);
                     graph.getSecondScale().addSeries(series_altitude);
-                    graph.getSecondScale().isYAxisBoundsManual();
                     graph.getSecondScale().setMinY(175);
                     graph.getSecondScale().setMaxY(380);
                     series_altitude.setTitle("altitude [m]");
@@ -273,13 +272,12 @@ public class GraphActivity extends AppCompatActivity {
 
 
     public void read_excel(){
-
         int id=(Integer)getIntent().getExtras().get(EXTRA_ID);
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
             SQLiteDatabase db = oxyfunDatabaseHelper.getReadableDatabase();
             Cursor cursor = db.query("Messungen",
-                    new String[]{"Distance","Heartrate","Altitude","Speed"},
+                    new String[]{"Distance","Heartrate","Altitude","Speed","Time"},
                     "_id = ?",
                     new String[]{Integer.toString(id)},
                     null, null, null);
@@ -293,8 +291,10 @@ public class GraphActivity extends AppCompatActivity {
                     sample.setHr(string2array(cursor.getString(1))[i]);
                     sample.setAltitude(0);
                     sample.setSpeed(string2array_double(cursor.getString(3))[i]);
+                    sample.setTime(i+1);
                     //
-                    //Log.d("asdf",String.valueOf(string2array(cursor.getString(0))[i]));
+
+                    Log.d("wtf",String.valueOf(string2array(cursor.getString(0))[i]));
                    // Log.d("asdf",String.valueOf(sample.getDistance()));
                 }
                 track_sample.add(sample);
@@ -304,7 +304,7 @@ public class GraphActivity extends AppCompatActivity {
             db.close();
 
         } catch (SQLiteException e) {
-            Toast toast = Toast.makeText(this,
+            toast = Toast.makeText(this,
                     "Database unavailable",
                     Toast.LENGTH_SHORT);
             toast.show();

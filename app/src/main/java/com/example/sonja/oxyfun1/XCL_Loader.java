@@ -177,7 +177,7 @@ public class XCL_Loader extends AppCompatActivity {
             StringBuilder sb = new StringBuilder();
 
                 Row row = sheet.getRow(0);
-                for (int c = 0; c < 300; c++) {
+                for (int c = 0; c < 400; c++) {
                         String value = getCellAsString2(row, c, formulaEvaluator);
                         if (value.equals("Move samples"))
                         {startspalte=c;
@@ -191,10 +191,13 @@ public class XCL_Loader extends AppCompatActivity {
                 //int cellsCount = row.getPhysicalNumberOfCells();
                 for (int c = startspalte; c < (startspalte+8); c++) {
                     if( c==startspalte || c==(startspalte+2) || c==(startspalte+4) || c==(startspalte+7)) {
+                        if(getCellAsString(row, c, formulaEvaluator)!=null)
+                        {
                         String value = getCellAsString(row, c, formulaEvaluator);
                         String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
                         Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
-                        sb.append(value + ", ");
+
+                        sb.append(value + ", ");}
                     }
                 }
                 sb.append(";");

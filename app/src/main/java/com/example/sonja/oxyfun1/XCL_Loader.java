@@ -192,7 +192,7 @@ public class XCL_Loader extends AppCompatActivity {
                  row = sheet.getRow(r);
                 //int cellsCount = row.getPhysicalNumberOfCells();
                 for (int c = startspalte; c < (startspalte+8); c++) {
-                    if( c==startspalte || c==(startspalte+2) || c==(startspalte+4) || c==(startspalte+7)) {
+                    if( c==startspalte || c==(startspalte+2) || c==(startspalte+3) || c==(startspalte+4)) {
                         if(getCellAsString(row, c, formulaEvaluator)!=null)
                         {
                         String value = getCellAsString(row, c, formulaEvaluator);
@@ -234,11 +234,11 @@ public class XCL_Loader extends AppCompatActivity {
                 Log.d(TAG, "ParseStringBuilder: Data from row: " + columns[1]);
                 double dist = Double.parseDouble(columns[1]);
                 Log.d(TAG, "dist parse worked.");
-                double pulse = Double.parseDouble(columns[3]);
+                double pulse = Double.parseDouble(columns[2]);
                 Log.d(TAG, "pulse parse worked.");
                 double time = Double.parseDouble(columns[0]);
                 Log.d(TAG, "time parse worked.");
-                double speed = Double.parseDouble(columns[2]);
+                double speed = Double.parseDouble(columns[3]);
                 String cellInfo = "(dist, pulse, time, speed): (" + dist + "," + pulse + "," + time + "," +  speed + ")";
                 Log.d(TAG, "ParseStringBuilder: Data from row: " + cellInfo);
 
@@ -305,47 +305,18 @@ public class XCL_Loader extends AppCompatActivity {
         try {
             Cell cell = row.getCell(c);
             CellValue cellValue = formulaEvaluator.evaluate(cell);
-            switch (cellValue.getCellType()) {
-                case Cell.CELL_TYPE_BOOLEAN:
-                    value = ""+cellValue.getBooleanValue();
-                    break;
-                case Cell.CELL_TYPE_NUMERIC:
-                    double numericValue = cellValue.getNumberValue();
-                    if(HSSFDateUtil.isCellDateFormatted(cell)) {
-                        Log.d(TAG, "DATEFORMATTER: Started.");
-                        double date = cellValue.getNumberValue();
-                        /**SimpleDateFormat formatter =
-                         new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS");
-                         String buffer = formatter.format(HSSFDateUtil.getJavaDate(date));
-                         char[] chars = buffer.toCharArray();
-                         String targetDate = new String(chars, 13, 21);
-                         String[] tokens = targetDate.split(":");
-                         int hours = Integer.parseInt(tokens[0]);
-                         int minutes = Integer.parseInt(tokens[1]);
-                         int seconds = Integer.parseInt(tokens[2]);
-                         int duration = 3600 * hours + 60 * minutes + seconds;*/
-                        value = ""+date;
-                    } else {
-                        value = ""+numericValue;
-                    }
-                    break;
-                case Cell.CELL_TYPE_STRING:
-                    if(cellValue.getStringValue()=="Move samples")
-                    {value="Move samples";
-                    break;}
-                    String buffa= cellValue.getStringValue();
-                    char[] chars = buffa.toCharArray();
-                    String targetDate = new String(chars, 11, 8);
-                    String[] tokens = targetDate.split(":");
-                    int hours = Integer.parseInt(tokens[0]);
-                    int minutes = Integer.parseInt(tokens[1]);
-                    int seconds = Integer.parseInt(tokens[2]);
-                    int duration = 3600 * hours + 60 * minutes + seconds;
-                    value = ""+duration;
-                    //value = ""+cellValue.getStringValue();
-                    break;
-                default:
-            }
+
+            String buffa = cellValue.getStringValue();
+            char[] chars = buffa.toCharArray();
+            String targetDate = new String(chars, 11, 8);
+            String[] tokens = targetDate.split(":");
+            int hours = Integer.parseInt(tokens[0]);
+            int minutes = Integer.parseInt(tokens[1]);
+            int seconds = Integer.parseInt(tokens[2]);
+            int duration = 3600 * hours + 60 * minutes + seconds;
+            value = "" + duration;
+
+
         } catch (NullPointerException e) {
 
             Log.e(TAG, "getCellAsString: NullPointerException: " + e.getMessage() );

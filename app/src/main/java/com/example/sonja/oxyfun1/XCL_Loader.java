@@ -61,6 +61,7 @@ public class XCL_Loader extends AppCompatActivity {
     String t_str;
     String v_str;
     String Datei;
+    Toast toast;
 
     public static int name_nr=1;
 
@@ -275,8 +276,8 @@ public class XCL_Loader extends AppCompatActivity {
             v[i] = uploadData.get(i).getSpeed();
 
         }
-        Toast toast = Toast.makeText(this, Double.toString(v[50]), Toast.LENGTH_LONG);
-        toast.show();
+        //toast= Toast.makeText(this, Double.toString(v[50]), Toast.LENGTH_LONG);
+        //toast.show();
         distance_str=array2string(distance);
         heartrate_str=array2string(heartrate);
         t_str=array2string(t);
@@ -293,7 +294,7 @@ public class XCL_Loader extends AppCompatActivity {
             contentValues.put("Altitude",0);
             contentValues.put("speed",v_str);
             long inserted=db.insert("Messungen",null, contentValues);
-             toast = Toast.makeText(this, String.valueOf(inserted), Toast.LENGTH_SHORT);
+             toast = Toast.makeText(this,"data loaded successfully", Toast.LENGTH_LONG);
              toast.show();
         }catch(SQLiteException e) {
             toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);

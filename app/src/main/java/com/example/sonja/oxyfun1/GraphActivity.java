@@ -58,9 +58,6 @@ public class GraphActivity extends AppCompatActivity {
         final Switch speedSwitch = findViewById(R.id.SpeedSwitch);
         final Switch distanceSwitch = findViewById(R.id.DistanceSwitch);
 
-
-        //Log.d("asdf",EXTRA_ID);
-
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         //read_csv();
         read_excel();
@@ -295,7 +292,7 @@ public class GraphActivity extends AppCompatActivity {
                     sample.setDistance(string2array(cursor.getString(0))[i]);
                     sample.setHr(string2array(cursor.getString(1))[i]);
                     sample.setAltitude(0);
-                    //sample.setSpeed(string2array(cursor.getString(3))[i]);
+                    sample.setSpeed(string2array_double(cursor.getString(3))[i]);
                     //
                     //Log.d("asdf",String.valueOf(string2array(cursor.getString(0))[i]));
                    // Log.d("asdf",String.valueOf(sample.getDistance()));
@@ -328,6 +325,15 @@ public class GraphActivity extends AppCompatActivity {
             double_array[i]=Double.valueOf(stringarray[i]);
             array[i]=(int)(double_array[i]);
 
+        }
+        return array;
+    }
+    public double[] string2array_double(String arraystring){
+
+        String[] stringarray=arraystring.split(",");
+        double[] array=new double[arraystring.length()];
+        for (int i=0; i<1000;i++){
+            array[i]=Double.valueOf(stringarray[i]);
         }
         return array;
     }

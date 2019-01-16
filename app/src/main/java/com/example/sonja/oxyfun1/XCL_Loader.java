@@ -175,7 +175,7 @@ public class XCL_Loader extends AppCompatActivity {
             //int rowsCount = sheet.getPhysicalNumberOfRows();
             FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
             StringBuilder sb = new StringBuilder();
-            int rowsCount = sheet.getPhysicalNumberOfRows();
+            //int rowsCount = sheet.getPhysicalNumberOfRows();
 
 
                 Row row = sheet.getRow(0);
@@ -192,7 +192,7 @@ public class XCL_Loader extends AppCompatActivity {
                  row = sheet.getRow(r);
                 //int cellsCount = row.getPhysicalNumberOfCells();
                 for (int c = startspalte; c < (startspalte+8); c++) {
-                    if( c==startspalte || c==(startspalte+2) || c==(startspalte+3) || c==(startspalte+4)) {
+                    if( c==startspalte || c==(startspalte+2) || c==(startspalte+3) || c==(startspalte+4)|| c==(startspalte+1)) {
                         if(getCellAsString(row, c, formulaEvaluator)!=null)
                         {
                         String value = getCellAsString(row, c, formulaEvaluator);
@@ -232,18 +232,19 @@ public class XCL_Loader extends AppCompatActivity {
             //use try catch to make sure there are no "" that try to parse into doubles.
             try{
                 Log.d(TAG, "ParseStringBuilder: Data from row: " + columns[1]);
-                double dist = Double.parseDouble(columns[1]);
+                double dist = Double.parseDouble(columns[2]);
                 Log.d(TAG, "dist parse worked.");
-                double pulse = Double.parseDouble(columns[2]);
+                double pulse = Double.parseDouble(columns[3]);
                 Log.d(TAG, "pulse parse worked.");
                 double time = Double.parseDouble(columns[0]);
                 Log.d(TAG, "time parse worked.");
-                double speed = Double.parseDouble(columns[3]);
-                String cellInfo = "(dist, pulse, time, speed): (" + dist + "," + pulse + "," + time + "," +  speed + ")";
+                double speed = Double.parseDouble(columns[4]);
+                double alt = Double.parseDouble(columns[1]);
+                String cellInfo = "(dist, pulse, time, speed): (" + dist + "," + pulse + "," + time + "," +  speed + ","+ alt;
                 Log.d(TAG, "ParseStringBuilder: Data from row: " + cellInfo);
 
                 //add the the uploadData ArrayList
-                uploadData.add(new Values(dist, pulse, time, speed));
+                uploadData.add(new Values(dist, pulse, time, speed, alt));
 
             }catch (NumberFormatException e){
 

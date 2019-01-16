@@ -6,14 +6,15 @@ public class Values {
     private double pulse;
     private double time;
     private double speed;
+    private double alt;
 
-    //default contructor
 
-    public Values(double dist, double pulse, double time, double speed) {
+    public Values(double dist, double pulse, double time, double speed, double alt) {
         this.dist = dist;
         this.pulse = pulse;
         this.time = time;
         this.speed = speed;
+        this.alt = alt;
     }
 
     public double getDist() {
@@ -46,5 +47,13 @@ public class Values {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public double getAlt() {
+        return alt;
+    }
+
+    public void setAlt(double alt) {
+        this.alt = alt;
     }
 }

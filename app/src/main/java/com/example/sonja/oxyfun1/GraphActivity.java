@@ -46,7 +46,7 @@ public class GraphActivity extends AppCompatActivity {
     public static final String EXTRA_ID = "ID"; //ist eine Konstante
 
     //int id=(Integer)getIntent().getExtras().get(EXTRA_ID);
-
+    Toast toast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +57,6 @@ public class GraphActivity extends AppCompatActivity {
         final Switch altitudeSwitch = findViewById(R.id.AltitudeSwitch);
         final Switch speedSwitch = findViewById(R.id.SpeedSwitch);
         final Switch distanceSwitch = findViewById(R.id.DistanceSwitch);
-
-
-        //Log.d("asdf",EXTRA_ID);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         //read_csv();
@@ -275,13 +272,12 @@ public class GraphActivity extends AppCompatActivity {
 
 
     public void read_excel(){
-
         int id=(Integer)getIntent().getExtras().get(EXTRA_ID);
         SQLiteOpenHelper oxyfunDatabaseHelper = new OxyfunDatabaseHelper(this);
         try {
             SQLiteDatabase db = oxyfunDatabaseHelper.getReadableDatabase();
             Cursor cursor = db.query("Messungen",
-                    new String[]{"Distance","Heartrate","Altitude","Speed"},
+                    new String[]{"Distance","Heartrate","Altitude","Speed","Time"},
                     "_id = ?",
                     new String[]{Integer.toString(id)},
                     null, null, null);
@@ -294,9 +290,11 @@ public class GraphActivity extends AppCompatActivity {
                     sample.setDistance(string2array(cursor.getString(0))[i]);
                     sample.setHr(string2array(cursor.getString(1))[i]);
                     sample.setAltitude(0);
-                    //sample.setSpeed(string2array(cursor.getString(3))[i]);
+                    sample.setSpeed(string2array_double(cursor.getString(3))[i]);
+                    sample.setTime(i+1);
                     //
-                    //Log.d("asdf",String.valueOf(string2array(cursor.getString(0))[i]));
+
+                    Log.d("wtf",String.valueOf(string2array(cursor.getString(0))[i]));
                    // Log.d("asdf",String.valueOf(sample.getDistance()));
                 }
                 track_sample.add(sample);
@@ -306,7 +304,7 @@ public class GraphActivity extends AppCompatActivity {
             db.close();
 
         } catch (SQLiteException e) {
-            Toast toast = Toast.makeText(this,
+            toast = Toast.makeText(this,
                     "Database unavailable",
                     Toast.LENGTH_SHORT);
             toast.show();
@@ -327,6 +325,15 @@ public class GraphActivity extends AppCompatActivity {
             double_array[i]=Double.valueOf(stringarray[i]);
             array[i]=(int)(double_array[i]);
 
+        }
+        return array;
+    }
+    public double[] string2array_double(String arraystring){
+
+        String[] stringarray=arraystring.split(",");
+        double[] array=new double[arraystring.length()];
+        for (int i=0; i<1000;i++){
+            array[i]=Double.valueOf(stringarray[i]);
         }
         return array;
     }

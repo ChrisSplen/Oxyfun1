@@ -21,7 +21,7 @@ public class OxyfunDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         updateMyDatabase(db, oldVersion, newVersion);
-        //insertData(db, "Messung1", 200, 80, 10, 200, 10);
+
     }
 
     private static void insertData(SQLiteDatabase db,
@@ -50,22 +50,9 @@ public class OxyfunDatabaseHelper extends SQLiteOpenHelper {
                     + "Altitude TEXT,"
                     + "Time TEXT,"
                     + "Speed TEXT);");
-
-
-            //insertData(db, "Messung", array2string(), array2string(), array2string(), array2string(), array2string());
-
-
-
         }
         if (oldVersion < 2) {
-            //db.execSQL("ALTER TABLE Messungen ADD COLUMN unbekannt;");
+            //kann verwendet werden um in spätere Fole Updates an Datenbank durzuführen.
         }
-    }
-    private String array2string(int[] array){
-        String arraystring=String.valueOf(array[0]);
-        for(int i=1;i<array.length;i++){
-            arraystring+=","+ String.valueOf(array[i]);
-        }
-        return arraystring;
     }
 }

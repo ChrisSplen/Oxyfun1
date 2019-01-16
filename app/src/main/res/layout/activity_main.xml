@@ -56,7 +56,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/startEntryListButton"
         app:layout_constraintTop_toBottomOf="@+id/startEntryListButton" />
-
+<!--
     <Button
         android:id="@+id/graphButton"
         android:layout_width="383dp"

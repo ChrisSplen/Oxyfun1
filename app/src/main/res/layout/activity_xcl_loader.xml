@@ -14,16 +14,20 @@
         android:id="@+id/btnUpDirectory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/buttondesign"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="100dp"
         android:text="Ordner zurück" />
 
     <Button
         android:id="@+id/btnViewSDCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/buttondesign"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="100dp"
         android:layout_marginRight="15dp"
         android:text="Datei laden" />
 

@@ -62,6 +62,7 @@ public class XCL_Loader extends AppCompatActivity {
     String v_str;
     String Datei;
     Toast toast;
+    int startspalte;
 
     public static int name_nr=1;
 
@@ -174,34 +175,22 @@ public class XCL_Loader extends AppCompatActivity {
             //int rowsCount = sheet.getPhysicalNumberOfRows();
             FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
             StringBuilder sb = new StringBuilder();
-            /*
-            int r=2;
-            Row row = sheet.getRow(r);
-            while(getCellAsString(row,1,formulaEvaluator)!=null){
-                //row = sheet.getRow(r); ist jetzt denke ich nicht mehr notwendig, nachdem am Ende der while-Schleife r inkrementiert wird
-                //int cellsCount = row.getPhysicalNumberOfCells();
-                //inner loop, loops through columns
-                for (int c = 0; c < 8; c++) {
-                    if( c==0 || c==2 || c==4 || c==7) {
-                        String value = getCellAsString(row, c, formulaEvaluator);
-                        String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
-                        Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
-                        sb.append(value + ", ");
-                    }
-                }
-                r++;
-                row = sheet.getRow(r);
-                sb.append(";");
-            }
-            */
 
-            //outer loop, loops through rows
-            for (int r = 2; r < 1500; r++) {
-                Row row = sheet.getRow(r);
+                Row row = sheet.getRow(0);
+                for (int c = 0; c < 300; c++) {
+                        String value = getCellAsString2(row, c, formulaEvaluator);
+                        if (value.equals("Move samples"))
+                        {startspalte=c;
+                        Log.d(TAG, "Startspalte: " + startspalte);
+                        break;}
+                }
+
+
+                for (int r = 2; r < 1500; r++) {
+                 row = sheet.getRow(r);
                 //int cellsCount = row.getPhysicalNumberOfCells();
-                //inner loop, loops through columns
-                for (int c = 0; c < 8; c++) {
-                    if( c==0 || c==2 || c==4 || c==7) {
+                for (int c = startspalte; c < (startspalte+8); c++) {
+                    if( c==startspalte || c==(startspalte+2) || c==(startspalte+4) || c==(startspalte+7)) {
                         String value = getCellAsString(row, c, formulaEvaluator);
                         String cellInfo = "r:" + r + "; c:" + c + "; v:" + value;
                         Log.d(TAG, "readExcelData: Data from row: " + cellInfo);
@@ -336,6 +325,9 @@ public class XCL_Loader extends AppCompatActivity {
                     }
                     break;
                 case Cell.CELL_TYPE_STRING:
+                    if(cellValue.getStringValue()=="Move samples")
+                    {value="Move samples";
+                    break;}
                     String buffa= cellValue.getStringValue();
                     char[] chars = buffa.toCharArray();
                     String targetDate = new String(chars, 11, 8);
@@ -355,6 +347,22 @@ public class XCL_Loader extends AppCompatActivity {
         }
         return value;
     }
+    private String getCellAsString2(Row row, int c, FormulaEvaluator formulaEvaluator) {
+        String value = "";
+        try {
+            Cell cell = row.getCell(c);
+            CellValue cellValue = formulaEvaluator.evaluate(cell);
+
+            if (cellValue.getStringValue() == "Move samples") {
+                value = "Move samples";
+
+            }
+            else{value = "" + cellValue.getStringValue();}
+        } catch (NullPointerException e) {
+
+            Log.e(TAG, "getCellAsString: NullPointerException: " + e.getMessage() );
+        }
+        return value;}
 
     private void checkInternalStorage() {
         Log.d(TAG, "checkInternalStorage: Started.");
